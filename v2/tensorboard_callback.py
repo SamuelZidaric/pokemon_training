@@ -73,7 +73,20 @@ class TensorboardCallback(BaseCallback):
             exclude=("stdout", "log", "json", "csv"),
         )
 
-        map_row = rearrange(explore_map, "(r f) h w -> (r h) (f w)", r=2)
+        n_envs = explore_map.shape[0]
+        if n_envs >= 2:
+            # Arrange into a grid with 2 rows
+            n_rows = min(2, n_envs)
+            # Pad to even number if needed
+            if n_envs % n_rows != 0:
+                pad_n = n_rows - (n_envs % n_rows)
+                pad = np.zeros((pad_n, *explore_map.shape[1:]), dtype=explore_map.dtype)
+                explore_map_padded = np.concatenate([explore_map, pad], axis=0)
+            else:
+                explore_map_padded = explore_map
+            map_row = rearrange(explore_map_padded, "(r f) h w -> (r h) (f w)", r=n_rows)
+        else:
+            map_row = explore_map[0]
         self.logger.record(
             "trajectory/explore_map",
             Image(map_row, "HW"),

@@ -182,20 +182,24 @@ EVENT_FLAGS_END = 0xD87E  # expanded for SS Anne (old: 0xD7F6)
 MUSEUM_TICKET_ADDR = 0xD754
 MUSEUM_TICKET_BIT = 0
 
-# Oak's Parcel quest flags (sourced from pokered/constants/event_constants.asm)
-# EVENT_GOT_OAKS_PARCEL: byte 0xD74E bit 1 — obtained parcel from Viridian Mart
-# EVENT_OAK_GOT_PARCEL: byte 0xD74E bit 0 — parcel delivered to Oak
-# EVENT_GOT_POKEDEX: byte 0xD74B bit 5 — Oak gave Pokedex
-# EVENT_GOT_POKEBALLS_FROM_OAK: byte 0xD74B bit 6 — Oak gave starter pokeballs
-# EVENT_FOLLOWED_OAK_INTO_LAB: byte 0xD74B bit 0 — initial cutscene
+# Oak's Parcel quest flags (sourced from pokered/constants/event_constants.asm,
+# verified against live tensorboard all_flags output from tactical_enhanced runs)
+# EVENT_GOT_OAKS_PARCEL: flag 0x3E → byte 0xD74E bit 6 — obtained parcel at Viridian Mart
+# EVENT_GOT_POKEDEX: flag 0x2D → byte 0xD74B bit 5 — Oak gave Pokedex (post-delivery)
+# EVENT_GOT_POKEBALLS_FROM_OAK: flag 0x2C → byte 0xD74B bit 4 — Oak gave starter pokeballs
+# EVENT_OAK_APPEARED_IN_PALLET: byte 0xD74B bit 7 — Oak blocks Route 1; fires pre-delivery
+# EVENT_PALLET_AFTER_GETTING_POKEBALLS: byte 0xD74B bit 6 — post-delivery return to Pallet
+# EVENT_FOLLOWED_OAK_INTO_LAB_2: byte 0xD74B bit 0 — initial cutscene
+# Delivery itself fires Pokedex+Pokeballs simultaneously, so we use pokedex as the
+# delivery proxy (no separate flag is reliably exposed at the RL step granularity).
 OAKS_PARCEL_ADDR = 0xD74E
-OAKS_PARCEL_BIT = 1
-DELIVERED_PARCEL_ADDR = 0xD74E
-DELIVERED_PARCEL_BIT = 0
+OAKS_PARCEL_BIT = 6
+DELIVERED_PARCEL_ADDR = 0xD74B  # uses POKEDEX flag as delivery proxy
+DELIVERED_PARCEL_BIT = 5
 POKEDEX_ADDR = 0xD74B
 POKEDEX_BIT = 5
 OAKS_POKEBALLS_ADDR = 0xD74B
-OAKS_POKEBALLS_BIT = 6
+OAKS_POKEBALLS_BIT = 4
 
 
 @dataclass(frozen=True)

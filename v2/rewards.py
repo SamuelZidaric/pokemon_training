@@ -81,6 +81,10 @@ class RewardContext:
     lead_level: int = 1
     opponent_level: int = 0
 
+    # Linear map progression (index into essential_map_locations)
+    # 0=Oak's lab, 3=Viridian, 5=Viridian Forest, 6=Pewter, 13=Cerulean, ...
+    max_map_progress: int = 0
+
 
 @dataclass
 class RewardComponent:
@@ -233,6 +237,15 @@ def party_growth_reward(ctx: RewardContext) -> float:
     return float(max(ctx.party_size - 1, 0))  # starter doesn't count
 
 
+def map_progress_reward(ctx: RewardContext) -> float:
+    """Reward for reaching further along the essential map progression path.
+
+    Pushes the agent beyond Viridian toward Viridian Forest, Pewter, etc.
+    Weighting is linear in progress index so each new story map feels better.
+    """
+    return float(max(ctx.max_map_progress, 0))
+
+
 # ---------------------------------------------------------------------------
 # Preset configurations
 # ---------------------------------------------------------------------------
@@ -282,6 +295,9 @@ def create_enhanced_reward_system(
     rs.add("catch", catch_reward, weight=reward_scale * 15)
     rs.add("evolve", evolution_reward, weight=reward_scale * 25)
     rs.add("party_growth", party_growth_reward, weight=reward_scale * 5)
+
+    # Linear map progression — pushes past Viridian toward Pewter/Cerulean
+    rs.add("map_progress", map_progress_reward, weight=reward_scale * 20)
 
     # Battle rewards — level-gated via env (see _track_battles) and reward fn
     rs.add("battle_win", battle_win_reward, weight=reward_scale * 5)

@@ -374,6 +374,8 @@ class RedGymEnv(Env):
             # Level-gating: use gated counter instead of raw battles_won
             lead_level=self.game.party_levels[0] if self.game.party_size > 0 else 1,
             opponent_level=self.game.opponent_level if self.game.in_battle else 0,
+            # Linear map progression index (0=Oak's lab … 14=Cerulean gym)
+            max_map_progress=self.max_map_progress,
         )
         scores = self.reward_system.compute(ctx)
         # preserve max-ever semantics for event reward

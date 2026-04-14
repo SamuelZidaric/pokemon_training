@@ -67,6 +67,20 @@ class RewardContext:
     hp_loss_this_step: float = 0.0
     party_fainted_count: int = 0
 
+    # Oak's Parcel quest chain (one-time story milestones)
+    has_oaks_parcel: bool = False
+    delivered_oaks_parcel: bool = False
+    has_pokedex: bool = False
+    has_oaks_pokeballs: bool = False
+
+    # Catching / evolution (party composition changes)
+    species_changed_count: int = 0   # how many party slots changed species this episode
+    new_species_caught: int = 0      # count of unique new species caught this episode
+
+    # Level-gating battle rewards
+    lead_level: int = 1
+    opponent_level: int = 0
+
 
 @dataclass
 class RewardComponent:
@@ -150,8 +164,16 @@ def battle_win_reward(ctx: RewardContext) -> float:
 
 
 def opponent_damage_reward(ctx: RewardContext) -> float:
-    """Reward for dealing damage to opponent during battle."""
+    """Reward for dealing damage to opponent during battle.
+
+    Level-gated: only rewards damage against opponents within ~2 levels of
+    the lead Pokemon. Prevents the agent from farming rewards by spamming
+    attacks on underleveled wild Pokemon.
+    """
     if not ctx.in_battle:
+        return 0.0
+    # Level gate: skip weak opponents
+    if ctx.opponent_level > 0 and ctx.opponent_level < max(ctx.lead_level - 2, 1):
         return 0.0
     damage_dealt = ctx.prev_opponent_hp_fraction - ctx.opponent_hp_fraction
     return max(damage_dealt, 0.0)
@@ -162,6 +184,53 @@ def pc_box_full_penalty(ctx: RewardContext) -> float:
     if ctx.is_box_full:
         return -1.0
     return 0.0
+
+
+# ---------------------------------------------------------------------------
+# Oak's Parcel quest rewards (one-time story milestones)
+# ---------------------------------------------------------------------------
+
+def oaks_parcel_reward(ctx: RewardContext) -> float:
+    """Big reward for obtaining Oak's Parcel at Viridian Mart."""
+    return 1.0 if ctx.has_oaks_parcel else 0.0
+
+
+def delivered_parcel_reward(ctx: RewardContext) -> float:
+    """Big reward for delivering the parcel back to Oak in Pallet Town.
+
+    This is the critical milestone — forces the agent to backtrack from
+    Viridian to Pallet instead of grinding Route 1.
+    """
+    return 1.0 if ctx.delivered_oaks_parcel else 0.0
+
+
+def pokedex_reward(ctx: RewardContext) -> float:
+    """Big reward for receiving the Pokedex (unlocks catching)."""
+    return 1.0 if ctx.has_pokedex else 0.0
+
+
+def pokeballs_reward(ctx: RewardContext) -> float:
+    """Reward for receiving the starter 5 Pokeballs from Oak."""
+    return 1.0 if ctx.has_oaks_pokeballs else 0.0
+
+
+# ---------------------------------------------------------------------------
+# Catching / evolution rewards (break the single-Pokemon loop)
+# ---------------------------------------------------------------------------
+
+def catch_reward(ctx: RewardContext) -> float:
+    """Reward proportional to new species caught this episode."""
+    return float(ctx.new_species_caught)
+
+
+def evolution_reward(ctx: RewardContext) -> float:
+    """Reward per evolution this episode (species-at-slot change)."""
+    return float(ctx.species_changed_count)
+
+
+def party_growth_reward(ctx: RewardContext) -> float:
+    """Reward for growing the party (pcount). Fires on catch events."""
+    return float(max(ctx.party_size - 1, 0))  # starter doesn't count
 
 
 # ---------------------------------------------------------------------------
@@ -186,16 +255,39 @@ def create_enhanced_reward_system(
     reward_scale: float = 1.0,
     explore_weight: float = 1.0,
 ) -> RewardSystem:
-    """Enhanced reward system with battle awareness and softlock prevention."""
+    """Enhanced reward system with story-focused shaping and anti-grind gating.
+
+    Key design choices (learned from training run 1, 2026-04-14):
+    - Story milestones (parcel, pokedex) get HUGE rewards to override grinding
+    - Battle rewards are level-gated to kill the Route 1 Rattata loop
+    - Catching and evolving are first-class signals to break the single-mon habit
+    """
     rs = RewardSystem()
+
+    # Story milestones — these must dominate everything else
+    rs.add("parcel", oaks_parcel_reward, weight=reward_scale * 60)
+    rs.add("delivered", delivered_parcel_reward, weight=reward_scale * 100)
+    rs.add("pokedex", pokedex_reward, weight=reward_scale * 120)
+    rs.add("pokeballs", pokeballs_reward, weight=reward_scale * 30)
+    rs.add("badge", badge_reward, weight=reward_scale * 50)
+
+    # Progress signals
     rs.add("event", event_reward, weight=reward_scale * 4)
     rs.add("heal", healing_reward, weight=reward_scale * 10)
-    rs.add("badge", badge_reward, weight=reward_scale * 10)
     rs.add("explore", explore_reward, weight=reward_scale * explore_weight * 0.1)
     rs.add("stuck", stuck_penalty, weight=reward_scale * 0.05)
     rs.add("level", level_reward, weight=reward_scale * 1.0)
+
+    # Catching & evolution — break the single-Pokemon loop
+    rs.add("catch", catch_reward, weight=reward_scale * 15)
+    rs.add("evolve", evolution_reward, weight=reward_scale * 25)
+    rs.add("party_growth", party_growth_reward, weight=reward_scale * 5)
+
+    # Battle rewards — level-gated via env (see _track_battles) and reward fn
     rs.add("battle_win", battle_win_reward, weight=reward_scale * 5)
     rs.add("opponent_dmg", opponent_damage_reward, weight=reward_scale * 2)
+
+    # Softlock prevention
     rs.add("pc_full", pc_box_full_penalty, weight=reward_scale * 1.0)
     return rs
 

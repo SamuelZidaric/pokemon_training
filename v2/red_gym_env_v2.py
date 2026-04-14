@@ -136,7 +136,7 @@ class RedGymEnv(Env):
         )
 
         head = "null" if self.headless else "SDL2"
-        self.pyboy = PyBoy(self.cfg.gb_path, window=head)
+        self.pyboy = PyBoy(self.cfg.gb_path, window=head, sound_emulated=False)
         if not self.headless:
             self.pyboy.set_emulation_speed(6)
 
@@ -184,8 +184,18 @@ class RedGymEnv(Env):
 
         # battle tracking
         self.battles_won = 0
+        self.battles_won_gated = 0   # only counts battles vs opponents near our level
+        self.trainer_battles_won = 0
         self.prev_in_battle = False
         self.prev_opponent_hp = 1.0
+        self.prev_battle_type = 0
+        self.prev_opponent_level = 0
+
+        # catching / evolution tracking
+        self.starting_species = self.game.party_species
+        self.seen_species: set[int] = set(s for s in self.starting_species if s != 0)
+        self.new_species_caught = 0
+        self.species_changed_count = 0
 
         # milestones
         self.milestone_tracker.reset()
@@ -209,6 +219,7 @@ class RedGymEnv(Env):
         self.party_size = self.game.party_size
 
         self._track_battles()
+        self._track_species()
         new_reward = self.update_reward()
         self.last_health = self.game.hp_fraction
         self.update_map_progress()
@@ -346,12 +357,23 @@ class RedGymEnv(Env):
             in_battle=self.game.in_battle,
             opponent_hp_fraction=self.game.opponent_hp_fraction if self.game.in_battle else 1.0,
             prev_opponent_hp_fraction=self.prev_opponent_hp,
-            battles_won=self.battles_won,
+            battles_won=self.battles_won_gated,
             is_box_full=self.game.is_box_full,
             pokemon_in_box=self.game.pokemon_in_current_box,
             type_advantage=self.game.type_advantage_signal,
             hp_loss_this_step=max(self.last_health - self.game.hp_fraction, 0.0),
             party_fainted_count=self.game.party_fainted_count,
+            # Oak's Parcel quest chain
+            has_oaks_parcel=self.game.has_oaks_parcel,
+            delivered_oaks_parcel=self.game.delivered_oaks_parcel,
+            has_pokedex=self.game.has_pokedex,
+            has_oaks_pokeballs=self.game.has_oaks_pokeballs,
+            # Catching / evolution
+            species_changed_count=self.species_changed_count,
+            new_species_caught=self.new_species_caught,
+            # Level-gating: use gated counter instead of raw battles_won
+            lead_level=self.game.party_levels[0] if self.game.party_size > 0 else 1,
+            opponent_level=self.game.opponent_level if self.game.in_battle else 0,
         )
         scores = self.reward_system.compute(ctx)
         # preserve max-ever semantics for event reward
@@ -368,14 +390,50 @@ class RedGymEnv(Env):
         return self._compute_rewards()
 
     def _track_battles(self) -> None:
-        """Track battle wins for reward computation."""
+        """Track battle wins for reward computation.
+
+        Gated counter: only rewards wins vs opponents within ~2 levels of
+        the lead Pokemon, or any trainer battle. This kills the Route 1
+        grinding loop (mashing weak Rattatas gives no reward).
+        """
         in_battle = self.game.in_battle
         if self.prev_in_battle and not in_battle and self.prev_opponent_hp <= 0:
             self.battles_won += 1
+            # Evaluate level-gated reward using previous battle state
+            lead_level = self.game.party_levels[0] if self.game.party_size > 0 else 1
+            if self.prev_battle_type == 2:
+                # Trainer battle — always rewarded (tied to story)
+                self.battles_won_gated += 1
+                self.trainer_battles_won += 1
+            elif self.prev_opponent_level >= max(lead_level - 2, 1):
+                # Wild battle against a non-pushover — rewarded
+                self.battles_won_gated += 1
+            # else: wild vs weak opponent → no reward (grinding filter)
+        # Record battle context while still in battle, for post-battle evaluation
+        if in_battle:
+            self.prev_battle_type = self.game.battle_type
+            self.prev_opponent_level = self.game.opponent_level
         self.prev_in_battle = in_battle
         self.prev_opponent_hp = (
             self.game.opponent_hp_fraction if in_battle else 1.0
         )
+
+    def _track_species(self) -> None:
+        """Track new species caught and evolution events this episode."""
+        current = self.game.party_species
+        for i, sp in enumerate(current):
+            if sp == 0:
+                continue
+            if sp not in self.seen_species:
+                # Either a catch (new party slot) or an evolution (known slot, new species)
+                prev_at_slot = self.starting_species[i] if i < len(self.starting_species) else 0
+                if prev_at_slot != 0 and prev_at_slot != sp:
+                    # Slot previously had a different species → evolution
+                    self.species_changed_count += 1
+                else:
+                    self.new_species_caught += 1
+                self.seen_species.add(sp)
+        self.starting_species = current
 
     @property
     def milestone_summary(self) -> dict[str, int | None]:

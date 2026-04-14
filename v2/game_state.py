@@ -182,6 +182,21 @@ EVENT_FLAGS_END = 0xD87E  # expanded for SS Anne (old: 0xD7F6)
 MUSEUM_TICKET_ADDR = 0xD754
 MUSEUM_TICKET_BIT = 0
 
+# Oak's Parcel quest flags (sourced from pokered/constants/event_constants.asm)
+# EVENT_GOT_OAKS_PARCEL: byte 0xD74E bit 1 — obtained parcel from Viridian Mart
+# EVENT_OAK_GOT_PARCEL: byte 0xD74E bit 0 — parcel delivered to Oak
+# EVENT_GOT_POKEDEX: byte 0xD74B bit 5 — Oak gave Pokedex
+# EVENT_GOT_POKEBALLS_FROM_OAK: byte 0xD74B bit 6 — Oak gave starter pokeballs
+# EVENT_FOLLOWED_OAK_INTO_LAB: byte 0xD74B bit 0 — initial cutscene
+OAKS_PARCEL_ADDR = 0xD74E
+OAKS_PARCEL_BIT = 1
+DELIVERED_PARCEL_ADDR = 0xD74E
+DELIVERED_PARCEL_BIT = 0
+POKEDEX_ADDR = 0xD74B
+POKEDEX_BIT = 5
+OAKS_POKEBALLS_ADDR = 0xD74B
+OAKS_POKEBALLS_BIT = 6
+
 
 @dataclass(frozen=True)
 class Position:
@@ -316,6 +331,28 @@ class GameState:
     @property
     def has_museum_ticket(self) -> bool:
         return self.read_bit(MUSEUM_TICKET_ADDR, MUSEUM_TICKET_BIT)
+
+    # -- Oak's Parcel quest chain ----------------------------------------
+
+    @property
+    def has_oaks_parcel(self) -> bool:
+        """Got the parcel from Viridian Mart."""
+        return self.read_bit(OAKS_PARCEL_ADDR, OAKS_PARCEL_BIT)
+
+    @property
+    def delivered_oaks_parcel(self) -> bool:
+        """Delivered the parcel back to Oak."""
+        return self.read_bit(DELIVERED_PARCEL_ADDR, DELIVERED_PARCEL_BIT)
+
+    @property
+    def has_pokedex(self) -> bool:
+        """Oak gave the Pokedex (unlocks catching)."""
+        return self.read_bit(POKEDEX_ADDR, POKEDEX_BIT)
+
+    @property
+    def has_oaks_pokeballs(self) -> bool:
+        """Got 5 Pokeballs from Oak after delivering parcel."""
+        return self.read_bit(OAKS_POKEBALLS_ADDR, OAKS_POKEBALLS_BIT)
 
     # -- battle details ---------------------------------------------------
 

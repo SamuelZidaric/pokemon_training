@@ -148,7 +148,9 @@ def main():
 
     # Training
     parser.add_argument("--num-cpu", type=int, default=64)
-    parser.add_argument("--ep-length", type=int, default=2048 * 80)
+    parser.add_argument("--ep-length", type=int, default=2048 * 80,
+                        help="Steps per episode. Recommend 65536+ to give "
+                             "the agent time to complete the parcel quest.")
     parser.add_argument("--session-path", default="runs/tactical")
     parser.add_argument("--checkpoint", default=None)
     parser.add_argument("--iterations", type=int, default=10000)
@@ -220,8 +222,14 @@ def main():
         model.rollout_buffer.n_envs = args.num_cpu
         model.rollout_buffer.reset()
     else:
-        # Battle mode: faster learning with higher entropy for exploration
-        ent_coef = 0.02 if args.mode == "battle" else 0.01
+        # Entropy: battle mode = 0.02, enhanced = 0.05 (prevent policy collapse
+        # into the Route 1 grinding loop observed in training run 1)
+        if args.mode == "battle":
+            ent_coef = 0.02
+        elif args.mode == "enhanced":
+            ent_coef = 0.05
+        else:
+            ent_coef = 0.01
         lr = 3e-4 if args.mode == "battle" else 2.5e-4
 
         model = PPO(

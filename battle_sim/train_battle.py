@@ -25,15 +25,18 @@ import os
 from pathlib import Path
 
 from stable_baselines3 import PPO
+from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
 
 from battle_sim.env import PokemonBattleEnv
 
 
-def _make_env(seed: int):
+def _make_env(seed: int, monitor_dir: str | None = None):
     def _thunk():
         env = PokemonBattleEnv(seed=seed, max_turns=200)
-        return env
+        # Monitor wraps the env so ep_rew_mean / ep_len_mean log to TB.
+        # Each worker gets its own monitor.csv; SB3 aggregates across workers.
+        return Monitor(env, filename=(f"{monitor_dir}/monitor_{seed}" if monitor_dir else None))
     return _thunk
 
 
@@ -55,11 +58,14 @@ def main() -> None:
     run_dir = Path(args.save_dir) / args.run_name
     run_dir.mkdir(parents=True, exist_ok=True)
 
+    mon_dir = str(run_dir / "monitor")
+    Path(mon_dir).mkdir(exist_ok=True)
+
     # Vec env
     if args.num_cpu == 1:
-        venv = DummyVecEnv([_make_env(0)])
+        venv = DummyVecEnv([_make_env(0, mon_dir)])
     else:
-        venv = SubprocVecEnv([_make_env(i) for i in range(args.num_cpu)])
+        venv = SubprocVecEnv([_make_env(i, mon_dir) for i in range(args.num_cpu)])
 
     model = PPO(
         policy="MultiInputPolicy",

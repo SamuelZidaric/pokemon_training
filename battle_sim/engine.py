@@ -17,6 +17,12 @@ from dataclasses import dataclass, field
 from enum import IntEnum
 
 from .damage import accuracy_check, compute_damage
+from .effects import (
+    apply_move_effect,
+    check_action_allowed,
+    end_of_turn_residuals,
+    status_spd_multiplier,
+)
 from .entities import Pokemon
 from .rng import BattleRNG
 
@@ -72,15 +78,31 @@ class BattleEngine:
             return log
         move.pp -= 1
 
-        if not accuracy_check(attacker, defender, move, self.rng):
+        hit = accuracy_check(attacker, defender, move, self.rng)
+        if not hit:
             log.append(f"{attacker.species}'s {move.name} missed")
+            # Miss still triggers the effect dispatch with move_hit=False so
+            # that status moves don't fire on whiffs — apply_move_effect
+            # short-circuits if move_hit is False.
+            log.extend(apply_move_effect(
+                move.effect, attacker, defender, self.rng,
+                move_hit=False, did_damage=False,
+            ))
             return log
 
         dmg, crit = compute_damage(attacker, defender, move, self.rng)
         defender.hp = max(0, defender.hp - dmg)
         tag = " (crit)" if crit else ""
-        log.append(f"{attacker.species} used {move.name}: {dmg} dmg{tag} → "
-                   f"{defender.species} HP {defender.hp}/{defender.max_hp}")
+        if dmg > 0:
+            log.append(f"{attacker.species} used {move.name}: {dmg} dmg{tag} → "
+                       f"{defender.species} HP {defender.hp}/{defender.max_hp}")
+        else:
+            log.append(f"{attacker.species} used {move.name}")
+
+        log.extend(apply_move_effect(
+            move.effect, attacker, defender, self.rng,
+            move_hit=True, did_damage=(dmg > 0),
+        ))
         return log
 
     # -- turn execution ----------------------------------------------------
@@ -102,9 +124,11 @@ class BattleEngine:
         opp_move = opp_action if 0 <= opp_action <= 3 else None
 
         # Determine turn order — Gen 1 uses effective speed; ties broken by
-        # the engine's internal coin flip.
-        p_spd = s.player.spd
-        o_spd = s.opponent.spd
+        # the engine's internal coin flip.  Paralysis quarters speed.
+        p_n, p_d = status_spd_multiplier(s.player)
+        o_n, o_d = status_spd_multiplier(s.opponent)
+        p_spd = s.player.spd * p_n // p_d
+        o_spd = s.opponent.spd * o_n // o_d
         if p_spd > o_spd:
             first, second = "player", "opponent"
         elif p_spd < o_spd:
@@ -116,14 +140,27 @@ class BattleEngine:
         for actor in (first, second):
             if s.player.fainted or s.opponent.fainted:
                 break
-            if actor == "player" and player_move is not None:
+            actor_mon = s.player if actor == "player" else s.opponent
+            defender_mon = s.opponent if actor == "player" else s.player
+            move_slot = player_move if actor == "player" else opp_move
+
+            # Turn-start gating — sleep/freeze/paralysis/flinch/confusion.
+            # If blocked, skip the move entirely (no PP consumed).
+            can_act, gate_log = check_action_allowed(actor_mon, self.rng)
+            s.last_events.extend(gate_log)
+            if not can_act:
+                continue
+
+            if move_slot is not None:
                 s.last_events.extend(
-                    self._use_move(s.player, s.opponent, player_move)
+                    self._use_move(actor_mon, defender_mon, move_slot)
                 )
-            elif actor == "opponent" and opp_move is not None:
-                s.last_events.extend(
-                    self._use_move(s.opponent, s.player, opp_move)
-                )
+
+        # End-of-turn residuals (burn/poison tick) — only if both survived
+        if not s.player.fainted:
+            s.last_events.extend(end_of_turn_residuals(s.player))
+        if not s.opponent.fainted:
+            s.last_events.extend(end_of_turn_residuals(s.opponent))
 
         # Resolve result
         if s.opponent.fainted and s.player.fainted:

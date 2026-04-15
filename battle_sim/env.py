@@ -44,30 +44,52 @@ from .v2_contract import (
 # ---------------------------------------------------------------------------
 
 def _default_teams(rng: np.random.Generator) -> tuple[Pokemon, Pokemon]:
-    """Sample a rough early-game matchup.
+    """Sample an early/mid-game matchup with level variance and status moves.
 
-    Pool intentionally small for v0.1 — enough for the sim to train against
-    Brock-adjacent encounters but not so wide that specialist convergence
-    stalls.
+    v0.2 changes vs v0.1:
+    - Player level sampled uniformly in [8, 18] — decouples the policy from
+      a fixed L10 assumption.
+    - Opponent pool widened and uses real Gen 1 learnsets at the chosen
+      level range.  Several opponents carry status moves (SLEEP_POWDER,
+      STUN_SPORE, THUNDER_WAVE, SUPERSONIC) so the policy sees the full
+      effect dispatch in training, not just damage.
+    - Player movesets include stat-stage moves (GROWL, LEER) that v0.1's
+      engine silently ignored; engine now applies them.
     """
+    p_level = int(rng.integers(8, 19))
+
     starters = [
-        ("CHARMANDER", 10, ["SCRATCH", "GROWL", "EMBER"]),
-        ("BULBASAUR",  10, ["TACKLE", "GROWL", "LEECH_SEED"]),
-        ("SQUIRTLE",   10, ["TACKLE", "TAIL_WHIP", "BUBBLE"]),
+        ("CHARMANDER", ["SCRATCH", "GROWL", "EMBER", "LEER"]),
+        ("BULBASAUR",  ["TACKLE", "GROWL", "LEECH_SEED", "VINE_WHIP"]),
+        ("SQUIRTLE",   ["TACKLE", "TAIL_WHIP", "BUBBLE", "WATER_GUN"]),
     ]
+
+    # Opponent level sampled relative to player: roughly [p-3, p+3], clamped.
+    o_level = max(3, min(25, p_level + int(rng.integers(-3, 4))))
+
     wild_pool = [
-        ("PIDGEY",   3, ["TACKLE", "SAND_ATTACK"]),
-        ("RATTATA",  4, ["TACKLE", "TAIL_WHIP"]),
-        ("SPEAROW",  5, ["PECK", "GROWL"]),
-        ("GEODUDE",  10, ["TACKLE", "DEFENSE_CURL"]),
-        ("ONIX",     12, ["TACKLE", "SCREECH", "BIND"]),
-        ("CATERPIE", 3, ["TACKLE", "STRING_SHOT"]),
-        ("WEEDLE",   3, ["POISON_STING", "STRING_SHOT"]),
+        ("PIDGEY",    ["TACKLE", "SAND_ATTACK", "GUST"]),
+        ("RATTATA",   ["TACKLE", "TAIL_WHIP", "QUICK_ATTACK"]),
+        ("SPEAROW",   ["PECK", "GROWL", "LEER"]),
+        ("GEODUDE",   ["TACKLE", "DEFENSE_CURL"]),
+        ("ONIX",      ["TACKLE", "SCREECH", "BIND"]),
+        ("CATERPIE",  ["TACKLE", "STRING_SHOT"]),
+        ("WEEDLE",    ["POISON_STING", "STRING_SHOT"]),
+        ("ODDISH",    ["ABSORB", "POISONPOWDER", "SLEEP_POWDER"]),
+        ("BELLSPROUT",["VINE_WHIP", "GROWTH", "SLEEP_POWDER"]),
+        ("ZUBAT",     ["LEECH_LIFE", "SUPERSONIC"]),
+        ("EKANS",     ["WRAP", "POISON_STING", "LEER"]),
+        ("SANDSHREW", ["SCRATCH", "DEFENSE_CURL", "SAND_ATTACK"]),
+        ("MANKEY",    ["SCRATCH", "LEER", "KARATE_CHOP"]),
+        ("NIDORAN_M", ["TACKLE", "LEER", "POISON_STING"]),
+        ("NIDORAN_F", ["TACKLE", "GROWL", "SCRATCH"]),
+        ("PIKACHU",   ["THUNDERSHOCK", "GROWL", "THUNDER_WAVE"]),
+        ("PARAS",     ["SCRATCH", "STUN_SPORE"]),
     ]
     p = starters[rng.integers(0, len(starters))]
     o = wild_pool[rng.integers(0, len(wild_pool))]
-    player = Pokemon.build(p[0], p[1], p[2])
-    opponent = Pokemon.build(o[0], o[1], o[2])
+    player = Pokemon.build(p[0], p_level, p[1])
+    opponent = Pokemon.build(o[0], o_level, o[1])
     return player, opponent
 
 

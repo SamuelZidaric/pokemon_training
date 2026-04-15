@@ -75,6 +75,13 @@ def compute_damage(
         atk = attacker.effective_atk(phys)
         dfn = defender.effective_def(phys)
 
+    # Burn halves Attack for physical moves (Gen 1 — applies even through
+    # crit's stat-stage bypass; the halving is a status multiplier, not a stage).
+    if phys:
+        from .effects import status_atk_multiplier
+        num, den = status_atk_multiplier(attacker)
+        atk = atk * num // den
+
     if dfn <= 0:
         dfn = 1
 

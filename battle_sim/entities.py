@@ -77,8 +77,13 @@ class Pokemon:
     spc_stage: int = 0
     acc_stage: int = 0
     eva_stage: int = 0
-    # status (v0.2 — stubbed for v0.1)
+    # Major status (v0.2): one of OK, PAR, SLP, BRN, PSN, FRZ
     status: str = "OK"
+    sleep_turns: int = 0          # countdown for SLP; 0 = awake
+    # Volatile status (reset on switch; we don't switch in v0.2 but the
+    # fields are here for v0.3)
+    confusion_turns: int = 0
+    flinched: bool = False
 
     @classmethod
     def build(cls, species: str, level: int, move_names: list[str]) -> "Pokemon":

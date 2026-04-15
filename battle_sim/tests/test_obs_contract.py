@@ -26,7 +26,7 @@ V2_TYPE_ID_LIST = [
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x07, 0x08,
     0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A,
 ]
-V2_TACTICAL_OBS_SIZE = 36  # v0.3 — appended 14 dims: 5+5 status 1-hot, 4 stages
+V2_TACTICAL_OBS_SIZE = 92  # v0.4 — 36 (v0.3) + 8 stages + 45 bench + 3 meta
 
 
 def test_type_id_list_matches_v2():
@@ -44,7 +44,7 @@ def test_obs_shape_and_dtype():
     o = Pokemon.build("PIDGEY", 5, ["TACKLE", "SAND_ATTACK"])
     state = BattleState(player=p, opponent=o, battle_type=1)
     vec = tactical_obs(state)
-    assert vec.shape == (36,)
+    assert vec.shape == (92,)
     assert vec.dtype == np.float32
 
 
@@ -135,6 +135,115 @@ def test_v03_status_ok_is_all_zeros():
     vec = tactical_obs(state)
     assert list(vec[22:27]) == [0.0] * 5
     assert list(vec[27:32]) == [0.0] * 5
+
+
+def test_v04_block_b_remaining_stages():
+    """Block B (36..43): spe/spc/acc/eva × (self, opp), each /6."""
+    p = Pokemon.build("CHARMANDER", 10, ["SCRATCH"])
+    o = Pokemon.build("PIDGEY", 10, ["TACKLE"])
+    p.spd_stage = 2
+    p.spc_stage = -1
+    p.acc_stage = 0
+    p.eva_stage = 3
+    o.spd_stage = -2
+    o.spc_stage = 1
+    o.acc_stage = -3
+    o.eva_stage = 0
+    state = BattleState(player=p, opponent=o, battle_type=1)
+    vec = tactical_obs(state)
+    assert vec[36] == pytest.approx(2 / 6)
+    assert vec[37] == pytest.approx(-1 / 6)
+    assert vec[38] == pytest.approx(0.0)
+    assert vec[39] == pytest.approx(3 / 6)
+    assert vec[40] == pytest.approx(-2 / 6)
+    assert vec[41] == pytest.approx(1 / 6)
+    assert vec[42] == pytest.approx(-3 / 6)
+    assert vec[43] == pytest.approx(0.0)
+
+
+def test_v04_block_c_bench_single_mon_is_all_zeros():
+    """Block C (44..88): with a 1-mon team, all 5 bench slots zero-filled."""
+    p = Pokemon.build("CHARMANDER", 10, ["SCRATCH"])
+    o = Pokemon.build("PIDGEY", 10, ["TACKLE"])
+    state = BattleState(player=p, opponent=o, battle_type=1)
+    vec = tactical_obs(state)
+    assert list(vec[44:89]) == [0.0] * 45
+
+
+def test_v04_block_c_bench_populated():
+    """Bench slot 0 should carry hp_frac, level, status, eff rollups."""
+    active = Pokemon.build("CHARMANDER", 10, ["SCRATCH"])
+    benched = Pokemon.build("SQUIRTLE", 12, ["TACKLE", "BUBBLE"])
+    benched.status = "PAR"
+    o = Pokemon.build("BELLSPROUT", 10, ["VINE_WHIP"])  # Grass/Poison
+    state = BattleState(
+        player_party=[active, benched], opp_party=[o], battle_type=1,
+    )
+    vec = tactical_obs(state)
+    slot0 = vec[44:53]  # 9 dims
+    # +0 hp_frac = 1.0 fresh mon
+    assert slot0[0] == pytest.approx(1.0)
+    # +1 level 12/100
+    assert slot0[1] == pytest.approx(0.12)
+    # +2..+6 status: PAR at index 0
+    assert list(slot0[2:7]) == [1.0, 0.0, 0.0, 0.0, 0.0]
+    # +7 off-eff: Squirtle(Water) vs Bellsprout(Grass/Poison).  Combined
+    # Water→Grass(0.5) × Water→Poison(1.0) = 0.5.  /4 = 0.125.
+    assert slot0[7] == pytest.approx(0.125)
+    # +8 def-eff: max over opp types — Grass→Water=2x, Poison→Water=1x.
+    # Squirtle is single-Water so only one defender type counts.  Max = 2.0.
+    assert slot0[8] == pytest.approx(2.0 / 4.0)
+
+
+def test_v04_block_d_meta():
+    """Block D (89..91): active_slot_index/5, self_alive/6, opp_remaining/6."""
+    a = Pokemon.build("CHARMANDER", 10, ["SCRATCH"])
+    b = Pokemon.build("SQUIRTLE", 10, ["TACKLE"])
+    c = Pokemon.build("BULBASAUR", 10, ["TACKLE"])
+    b.hp = 0  # fainted
+    o1 = Pokemon.build("PIDGEY", 10, ["TACKLE"])
+    o2 = Pokemon.build("RATTATA", 10, ["TACKLE"])
+    state = BattleState(
+        player_party=[a, b, c], opp_party=[o1, o2], player_active=0, battle_type=1,
+    )
+    vec = tactical_obs(state)
+    assert vec[89] == pytest.approx(0 / 5)      # active slot 0
+    assert vec[90] == pytest.approx(2 / 6)      # 2 of 3 alive (b fainted)
+    assert vec[91] == pytest.approx(2 / 6)      # 2 opp remaining
+
+
+def test_v04_bench_ordering_skips_active():
+    """When active is mid-party, bench enumerates other members in order."""
+    a = Pokemon.build("CHARMANDER", 10, ["SCRATCH"])
+    b = Pokemon.build("SQUIRTLE", 10, ["TACKLE"])
+    c = Pokemon.build("BULBASAUR", 10, ["TACKLE"])
+    o = Pokemon.build("PIDGEY", 10, ["TACKLE"])
+    state = BattleState(
+        player_party=[a, b, c], opp_party=[o], player_active=1, battle_type=1,
+    )
+    vec = tactical_obs(state)
+    # With active=1, bench display order = [party[0]=Charm, party[2]=Bulba].
+    # slot 0 of bench = Charmander (level 10/100)
+    assert vec[44 + 1] == pytest.approx(0.10)
+    # slot 1 of bench = Bulbasaur (level 10/100)
+    assert vec[44 + 9 + 1] == pytest.approx(0.10)
+
+
+def test_v04_bench_rollup_uses_species_types_not_moves():
+    """The off/def eff rollup must use attacker SPECIES types only — PyBoy
+    can't read opp hidden moves, so the sim can't either for this signal."""
+    # Charmander benched, with a HYPER_BEAM-like fake (doesn't matter for
+    # rollup).  Opp is Geodude (Rock/Ground).
+    active = Pokemon.build("SQUIRTLE", 10, ["TACKLE"])
+    bench = Pokemon.build("CHARMANDER", 10, ["SCRATCH"])  # Fire type
+    o = Pokemon.build("GEODUDE", 10, ["TACKLE"])          # Rock/Ground
+    state = BattleState(
+        player_party=[active, bench], opp_party=[o], battle_type=1,
+    )
+    vec = tactical_obs(state)
+    # off-eff: Fire→Rock=0.5 × Fire→Ground=1.0 = 0.5 combined.  /4 = 0.125.
+    # (Combined, not max — see data_loader.type_effectiveness.)
+    assert vec[44 + 7] == pytest.approx(0.125)
 
 
 def test_opp_idx_15_16_set():

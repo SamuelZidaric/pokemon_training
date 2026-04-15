@@ -21,16 +21,32 @@ NUM_POKEMON_TYPES: int = 15  # divisor is NUM_POKEMON_TYPES - 1 = 14
 
 
 # --- Tactical observation vector ---
-# v0.3: expanded 22 → 36 to give the policy direct access to major status
-# and attack/defense stages on both actors.  This BREAKS the v0.1/v0.2
-# transfer contract — v2/game_state.py on claude/quizzical-sammet must
-# append the same 14 dims in the same order before any weight transfer.
+# v0.4: expanded 36 → 92.  Full sensor suite (remaining stat stages) + 6v6
+# switching support (5 bench slots + battle-global meta).  See
+# TRANSFER_CONTRACT.md for the full block layout.
 #
-# Status is one-hot (5 dims per actor: PAR/SLP/BRN/PSN/FRZ; all-zero = OK).
-# Ordinal was rejected as a DL anti-pattern — spurious magnitude ordering
-# (Paralyze > Sleep? Poison "between" Sleep and Burn?) wastes sample
-# efficiency, which is precisely what this expansion is meant to improve.
-TACTICAL_OBS_SIZE: int = 36
+# Block A (0..35)   : unchanged v0.3 active-mon tactical.
+# Block B (36..43)  : 8 remaining stat stages — spe/spc/acc/eva × (self, opp).
+# Block C (44..88)  : 5 bench slots × 9 dims each (hp, level, status onehot,
+#                     offensive eff rollup, defensive eff rollup vs active opp).
+# Block D (89..91)  : active_slot_index, self_alive_count, opp_remaining.
+#
+# Status is one-hot (5 dims per actor slot: PAR/SLP/BRN/PSN/FRZ; all-zero = OK).
+# Ordinal was rejected in v0.3 as a DL anti-pattern.  Type matchups on bench
+# are encoded as effectiveness ROLLUPS not type-index /14 — same reasoning
+# (categorical-as-ordinal is noise) and keeps bench compact at 9 dims/slot.
+TACTICAL_OBS_SIZE: int = 92
+
+# Block boundaries (for asserts and layout sanity-checks).
+TACTICAL_BLOCK_A_END: int = 36   # v0.3 active-mon tactical
+TACTICAL_BLOCK_B_END: int = 44   # + 8 extra stages (spe/spc/acc/eva × 2 actors)
+TACTICAL_BLOCK_C_END: int = 89   # + 5 bench slots × 9 dims
+TACTICAL_BLOCK_D_END: int = 92   # + 3 battle-global meta dims
+
+# Party / bench sizing — Gen 1 max party is 6.  Bench is party minus active.
+MAX_PARTY_SIZE: int = 6
+MAX_BENCH_SIZE: int = 5          # party - 1 active
+BENCH_SLOT_DIMS: int = 9         # hp, level, status×5, off_eff, def_eff
 
 # Status one-hot layout — index within the 5-slot per-actor sub-vector.
 # "OK" is encoded as all-zeros, so it has no slot.
@@ -38,6 +54,10 @@ STATUS_ONEHOT_INDEX: dict[str, int] = {
     "PAR": 0, "SLP": 1, "BRN": 2, "PSN": 3, "FRZ": 4,
 }
 STATUS_ONEHOT_SIZE: int = 5
+
+# Invalid-action penalty applied when the engine rejects an atomic action.
+# See TRANSFER_CONTRACT.md §3.  PyBoy-side must match this exactly.
+INVALID_ACTION_PENALTY: float = -0.05
 
 
 # --- Full observation Dict space shapes (for zero-pad stubs in env.py) ---

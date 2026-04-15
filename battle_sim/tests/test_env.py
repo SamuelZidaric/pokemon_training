@@ -1,4 +1,4 @@
-"""Smoke test for the Gymnasium env wrapper (v0.3 thin-obs)."""
+"""Smoke test for the Gymnasium env wrapper (v0.4 6v6 + 92-dim obs)."""
 from __future__ import annotations
 
 import numpy as np
@@ -11,7 +11,7 @@ from battle_sim.v2_contract import TACTICAL_OBS_SIZE
 def test_env_reset_and_step():
     env = PokemonBattleEnv(seed=0)
     obs, info = env.reset(seed=0)
-    # v0.3 thin-obs: flat Box(36,) of tactical floats only.
+    # v0.4: flat Box(92,) of tactical floats only (thin-obs preserved).
     assert obs.shape == (TACTICAL_OBS_SIZE,)
     assert obs.dtype == np.float32
     assert (obs >= -1.0).all() and (obs <= 1.0).all()

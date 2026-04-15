@@ -588,3 +588,170 @@ not addressable from obs.
 
 _v0.3 shipped on `claude/jovial-carson`; Training Run 3 results above.
 v0.4 candidate: accuracy/evasion stage dims + 3M steps._
+
+---
+
+## v0.4 — full sensors + 6v6 switching — 2026-04-15
+
+**Goal:** close the remaining observation gaps from v0.3 (Pidgey Sand-Attack
+regression root cause: no accuracy-stage signal) AND unlock the core Gen 1
+tactical layer that was deferred since v0.1 — party switching.  This is the
+"sensors + switching" release that takes the sim from "1v1 move picker" to
+"6v6 tactical battle".
+
+### The transfer contract — locked, versioned, documented
+
+v0.4 introduces `battle_sim/TRANSFER_CONTRACT.md` — the single source of
+truth for what `claude/quizzical-sammet` must implement to accept
+battle-expert weights.  Covers obs layout, action semantics, reward shape,
+rejection protocol, PyBoy macro executor sketch, and drift detection.
+This is the **last contract break** planned — subsequent changes should be
+additive-with-contract-version-bump, not layout re-orderings.
+
+### Obs expansion: 36 → 92 dims
+
+Block layout (see TRANSFER_CONTRACT.md for the full table):
+
+| Block | Indices | Content |
+|---|---|---|
+| A | 0..35 | v0.3 active-mon tactical (unchanged) |
+| B | 36..43 | remaining stat stages (spe/spc/acc/eva × 2 actors) |
+| C | 44..88 | 5 bench slots × 9 dims (hp, level, status onehot, off-eff, def-eff) |
+| D | 89..91 | active_slot_index/5, self_alive/6, opp_remaining/6 |
+
+**Block B** — directly targeting the v0.3 Pidgey collapse.  The missing
+signal was accuracy-stage feedback after Sand-Attack; Block B puts all four
+remaining Gen 1 stages on the tape.
+
+**Block C — bench encoding with effectiveness rollups, not type indices.**
+Each bench slot carries (hp, level, status-onehot-5, off-eff-rollup,
+def-eff-rollup).  The rollups are computed using species types only —
+**never** opponent's hidden moveset — which mirrors what the PyBoy agent
+can read from RAM (species bytes visible; move bytes of opp are not in
+wild battles).  This avoids an "oracle policy" that can't transfer and
+keeps the feature dim tight at 9 dims/slot × 5 slots = 45.
+
+Why not type indices on bench?  Same reason v0.3 rejected ordinal status
+encoding — categorical-as-ordinal forces the MLP to un-learn spurious
+magnitude ordering, wasting sample efficiency.  The only thing the policy
+uses bench-mon types FOR is matchup decisions; encode the answer directly.
+
+**Block D** gives the value function the "party health bar" it needs for
+stable returns across switches.  `opp_remaining` is the fog-of-war
+ball-icons count — what a human sees in the real game.
+
+**Bench display order** (v0.4 specific): bench[k] = the k-th non-active
+party member in original-team order.  So when active=2, bench shows
+[party[0], party[1], party[3], party[4], party[5]].  Action `4+k`
+switches to `bench[k]`.  This allows "switch back to starter" (impossible
+under a fixed party-index mapping), at the cost of making action semantics
+active-index-dependent.  The PyBoy macro executor must read
+`active_slot_index` before translating atomic→button.
+
+### Action space + rejection protocol
+
+Still `Discrete(9)` — 0..3 moves, 4..8 switches.  But 4..8 now have real
+semantics and so does rejection:
+
+- **Invalid action** = move slot out-of-range, move slot has 0 PP, switch
+  to fainted/out-of-range/already-active bench pos.
+- **Sim response**: engine sets `state.last_action_was_invalid=True`,
+  player action burns, opponent still gets its normal action, turn counter
+  advances.  Env applies `INVALID_ACTION_PENALTY = -0.05` on top of
+  whatever damage the opp dealt.
+- **PyBoy response** (spec'd in TRANSFER_CONTRACT.md §3, not implemented
+  here): game rejects via "No!" dialog, wrapper detects no-turn-transition,
+  applies the same -0.05.
+
+**Why penalty over action-masking.**  Masking is a crutch that doesn't
+transfer.  When the policy lands in PyBoy where there's no mask (just an
+error "bloop"), it would panic on any fainted-slot select.  Penalty
+teaches the constraint natively → no domain-shift shock at transfer.
+
+### Engine state machine
+
+`BattleState` grew from `player: Pokemon` / `opponent: Pokemon` to
+`player_party: list[Pokemon]` / `opp_party: list[Pokemon]` with
+`player_active` / `opp_active` indices.  `player` / `opponent` preserved as
+@property accessors returning the active mon, so all v0.1-era tests and
+call sites keep working.  Constructor accepts either `player=` (legacy
+single-mon) or `player_party=` (v0.4) kwargs.
+
+**Turn order in Gen 1 terms:**
+1. Switch phase: both sides' switch actions resolve first (Gen 1 switches
+   always precede attacks).  Outgoing mon's confusion_turns + flinched are
+   cleared (volatile status).
+2. Attack phase: speed-order (paralysis-quartered) resolution of remaining
+   move actions.
+3. End-of-turn residuals: burn/poison ticks.
+4. **Forced switch-on-faint**: any side whose active just fainted
+   auto-sends the lowest-index non-fainted party member.  Silent to the
+   policy — no extra step.  Deferred to v0.5: policy-controlled post-faint
+   switch.
+
+### Reward
+
+Per-step reward is now **party-wide** HP shaping:
+
+```
+shaping = dealt_opp_party_hp_frac - taken_our_party_hp_frac
+```
+
+where `party_hp_frac = mean(hp/max_hp over all party slots)`.  This keeps
+the shaping scale invariant across switches — fainting a full-health opp
+with one of your mons nets roughly the right magnitude regardless of which
+mon was active for the KO.  Active-mon-only shaping would have made
+switches look artificially costly (HP vanishes from the "our" side when
+you switch out a damaged mon).
+
+### Tests added / updated
+
+- `test_obs_contract.py`: 92-dim assertion, Block B/C/D field-level tests,
+  bench-ordering-skips-active test, rollup-uses-species-types-only test.
+- `test_switching.py` (new, 13 tests): valid switch, display-order action
+  mapping, switch-back-to-slot-0, reject fainted/out-of-range/already-
+  active, reject invalid-move-slot and 0-PP, volatile-status clear on
+  switch, forced-switch-on-faint picks lowest-living, battle ends on full
+  wipe, env invalid-action penalty applied, env valid-action no-penalty.
+- `test_env.py`: updated shape assertion 36 → 92.
+
+**75/75 tests passing** on first clean run.  Smoke-train pipeline
+(PPO MlpPolicy `Linear(92→64)→ReLU→Linear(64→64)→ReLU`) verified.
+
+### Deferred to v0.5
+
+- **Policy-controlled post-faint switch** (currently auto-send lowest
+  living).  Would complicate episode step structure — one turn = possibly
+  multiple policy calls.
+- **Trainer opponent AI** (Brock/Misty scripted parties with sensible
+  switching).  Opp policies still emit only 0..3 today.
+- **Item usage** in battle (potions, status heal) — requires a bag-slot
+  obs block and new action-space values.  This WOULD break the contract
+  again, so it's a v1.0-not-v0.5 candidate.
+- **Opponent visible moves** — in the real game, the player sees opp's
+  moves after they're used once.  Adding this would be a real feature,
+  but it's a fingerprint/sequence encoding problem (variable-length).
+
+### Training Run 4 — PENDING
+
+_Run when ready:_
+```bash
+python -m battle_sim.train_battle --num-cpu 4 --vec dummy --steps 1000000 --run-name battle_v0_4
+```
+
+Projected wall: ~3-4 min (slightly slower than v0.3 due to 92-dim obs and
+multi-mon episode length; still dominated by PPO update not engine).
+
+**Hypotheses to test:**
+1. Pidgey recovers 43% → 65%+ (Block B acc-stage fixes the v0.3 regression).
+2. Pikachu past 50% (status obs now backed by speed-stage visibility).
+3. Switch action usage > 5% vs greedy (policy learns proactive switching
+   given the bench signals); >20% in 6v6 matchups where lead is a bad
+   matchup.
+4. Slot-1 debuff usage stays in 1-5% range (v0.3 regression sanity check).
+
+If switching usage stays ≈0%, diagnose: is reward shaping discouraging
+switches (because switching trades a turn for zero damage)?  Possibly add
++0.02 bonus for switching INTO a favorable matchup (off-eff rollup > 0.5),
+or let it ride — policy may learn that turn-trade is worth it when the
+bad matchup would lose more than 2% HP/turn.

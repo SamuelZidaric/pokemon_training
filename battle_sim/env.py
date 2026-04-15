@@ -1,23 +1,24 @@
 """Gymnasium-compatible battle environment for PPO training.
 
-v0.3 (thin-obs): emits a flat Box(36,) containing only the tactical vector.
-The full-game Dict obs is intentionally *not* emitted here — we train the
-policy as an MlpPolicy so the first two Linear layers of the policy's MLP
-drop 1:1 into PokemonNet's tactical branch at transfer time.
-
-A PadToFullGameDictWrapper is not needed for transfer (weight copy is direct
-from mlp_extractor.policy_net), only for running the trained policy back in
-the full-game Gym env — not a Week-4 goal.  See DEVLOG v0.3 speedup entry.
+v0.4 (6v6 + full sensors): emits a flat Box(92,) containing the full tactical
+obs spec — see TRANSFER_CONTRACT.md.  The env wraps a multi-mon sim with
+real switching and rejection-by-penalty for invalid atomic actions.
 
 Action space is Discrete(9):
-    0..3 — use move slot 0..3
-    4..8 — switch to party slot 1..5 (no-op until v0.4)
+    0..3 — use move slot 0..3 on active mon
+    4..8 — switch to bench display position 0..4 (the k-th non-active party
+           member in original-team order).  Invalid switches (out-of-range,
+           fainted, already-active) are rejected with a -0.05 penalty and
+           still cost the turn; the opponent takes its normal action.
 
-Rewards are unchanged from v0.2:
-    +1.0  on win
-    -1.0  on loss
-    +Δhp  shaping per turn (opp HP lost − our HP lost, in HP fraction)
-    -0.01 step penalty (encourage decisive play)
+Rewards (per TRANSFER_CONTRACT.md §4):
+    +1.0  on win (all opp fainted)
+    -1.0  on loss (all player fainted)
+    +Δhp shaping per turn — whole-party HP fractions on both sides, so
+          fainting a full-health opp mon and having an ally die for it
+          nets roughly zero shaping.  Independent of which mon is active.
+    -0.01 step penalty
+    -0.05 iff the atomic action was rejected by the engine
 """
 from __future__ import annotations
 
@@ -29,61 +30,113 @@ from .engine import BattleEngine, BattleResult, BattleState, random_opponent_pol
 from .entities import Pokemon
 from .obs import tactical_obs
 from .rng import BattleRNG
-from .v2_contract import TACTICAL_OBS_SIZE
+from .v2_contract import (
+    INVALID_ACTION_PENALTY,
+    MAX_PARTY_SIZE,
+    TACTICAL_OBS_SIZE,
+)
 
 
 # ---------------------------------------------------------------------------
-# Battle initial-state sampling
+# Multi-mon team sampling
 # ---------------------------------------------------------------------------
 
-def _default_teams(rng: np.random.Generator) -> tuple[Pokemon, Pokemon]:
-    """Sample an early/mid-game matchup with level variance and status moves.
+_STARTERS = [
+    ("CHARMANDER", ["SCRATCH", "GROWL", "EMBER", "LEER"]),
+    ("BULBASAUR",  ["TACKLE", "GROWL", "LEECH_SEED", "VINE_WHIP"]),
+    ("SQUIRTLE",   ["TACKLE", "TAIL_WHIP", "BUBBLE", "WATER_GUN"]),
+]
 
-    v0.2 changes vs v0.1:
-    - Player level sampled uniformly in [8, 18] — decouples the policy from
-      a fixed L10 assumption.
-    - Opponent pool widened and uses real Gen 1 learnsets at the chosen
-      level range.  Several opponents carry status moves (SLEEP_POWDER,
-      STUN_SPORE, THUNDER_WAVE, SUPERSONIC) so the policy sees the full
-      effect dispatch in training, not just damage.
-    - Player movesets include stat-stage moves (GROWL, LEER) that v0.1's
-      engine silently ignored; engine now applies them.
+# Extra party pool — mons the player would plausibly have caught on Route 1-3
+# with level-appropriate learnsets.  Each entry is a fallback team-member
+# candidate for slots 1..5.
+_PARTY_POOL = [
+    ("PIDGEY",    ["TACKLE", "SAND_ATTACK", "GUST"]),
+    ("RATTATA",   ["TACKLE", "TAIL_WHIP", "QUICK_ATTACK"]),
+    ("SPEAROW",   ["PECK", "GROWL", "LEER"]),
+    ("NIDORAN_M", ["TACKLE", "LEER", "POISON_STING"]),
+    ("NIDORAN_F", ["TACKLE", "GROWL", "SCRATCH"]),
+    ("MANKEY",    ["SCRATCH", "LEER", "KARATE_CHOP"]),
+    ("CATERPIE",  ["TACKLE", "STRING_SHOT"]),
+    ("WEEDLE",    ["POISON_STING", "STRING_SHOT"]),
+    ("ZUBAT",     ["LEECH_LIFE", "SUPERSONIC"]),
+    ("ODDISH",    ["ABSORB", "POISONPOWDER", "SLEEP_POWDER"]),
+    ("BELLSPROUT",["VINE_WHIP", "GROWTH", "SLEEP_POWDER"]),
+]
+
+# Same opponent pool as v0.3 — used for each opp party slot independently.
+_WILD_POOL = [
+    ("PIDGEY",    ["TACKLE", "SAND_ATTACK", "GUST"]),
+    ("RATTATA",   ["TACKLE", "TAIL_WHIP", "QUICK_ATTACK"]),
+    ("SPEAROW",   ["PECK", "GROWL", "LEER"]),
+    ("GEODUDE",   ["TACKLE", "DEFENSE_CURL"]),
+    ("ONIX",      ["TACKLE", "SCREECH", "BIND"]),
+    ("CATERPIE",  ["TACKLE", "STRING_SHOT"]),
+    ("WEEDLE",    ["POISON_STING", "STRING_SHOT"]),
+    ("ODDISH",    ["ABSORB", "POISONPOWDER", "SLEEP_POWDER"]),
+    ("BELLSPROUT",["VINE_WHIP", "GROWTH", "SLEEP_POWDER"]),
+    ("ZUBAT",     ["LEECH_LIFE", "SUPERSONIC"]),
+    ("EKANS",     ["WRAP", "POISON_STING", "LEER"]),
+    ("SANDSHREW", ["SCRATCH", "DEFENSE_CURL", "SAND_ATTACK"]),
+    ("MANKEY",    ["SCRATCH", "LEER", "KARATE_CHOP"]),
+    ("NIDORAN_M", ["TACKLE", "LEER", "POISON_STING"]),
+    ("NIDORAN_F", ["TACKLE", "GROWL", "SCRATCH"]),
+    ("PIKACHU",   ["THUNDERSHOCK", "GROWL", "THUNDER_WAVE"]),
+    ("PARAS",     ["SCRATCH", "STUN_SPORE"]),
+]
+
+
+def _sample_mon(pool: list[tuple[str, list[str]]], level: int,
+                rng: np.random.Generator) -> Pokemon:
+    species, moves = pool[rng.integers(0, len(pool))]
+    return Pokemon.build(species, level, moves)
+
+
+def _default_teams(rng: np.random.Generator) -> tuple[list[Pokemon], list[Pokemon]]:
+    """Sample a 6v6 matchup.  Lead mon for the player is always a starter;
+    the rest of the party is sampled from the broader route-1-3 pool.
+
+    Team sizes vary: player 3-6 mons, opp 1-4 mons.  Wider variance than
+    v0.3 so the policy sees both early-game 1v1 and mid-game 4v4 scenarios.
     """
     p_level = int(rng.integers(8, 19))
+    # Player lead: starter.
+    lead_species, lead_moves = _STARTERS[rng.integers(0, len(_STARTERS))]
+    player_team = [Pokemon.build(lead_species, p_level, lead_moves)]
 
-    starters = [
-        ("CHARMANDER", ["SCRATCH", "GROWL", "EMBER", "LEER"]),
-        ("BULBASAUR",  ["TACKLE", "GROWL", "LEECH_SEED", "VINE_WHIP"]),
-        ("SQUIRTLE",   ["TACKLE", "TAIL_WHIP", "BUBBLE", "WATER_GUN"]),
-    ]
+    # Player bench: sample without duplicating the starter species.
+    p_size = int(rng.integers(3, MAX_PARTY_SIZE + 1))  # 3..6
+    pool_filtered = [e for e in _PARTY_POOL if e[0] != lead_species]
+    while len(player_team) < p_size:
+        entry = pool_filtered[rng.integers(0, len(pool_filtered))]
+        # Level variance within the party: each bench mon ±2 of lead.
+        lv = max(3, min(25, p_level + int(rng.integers(-2, 3))))
+        player_team.append(Pokemon.build(entry[0], lv, entry[1]))
 
-    # Opponent level sampled relative to player: roughly [p-3, p+3], clamped.
-    o_level = max(3, min(25, p_level + int(rng.integers(-3, 4))))
+    # Opp team: 1..4 mons, each sampled from wild pool.  Opp level tracks
+    # player level with the same ±3 variance v0.3 used.
+    o_size = int(rng.integers(1, 5))
+    opp_team = []
+    for _ in range(o_size):
+        lv = max(3, min(25, p_level + int(rng.integers(-3, 4))))
+        opp_team.append(_sample_mon(_WILD_POOL, lv, rng))
 
-    wild_pool = [
-        ("PIDGEY",    ["TACKLE", "SAND_ATTACK", "GUST"]),
-        ("RATTATA",   ["TACKLE", "TAIL_WHIP", "QUICK_ATTACK"]),
-        ("SPEAROW",   ["PECK", "GROWL", "LEER"]),
-        ("GEODUDE",   ["TACKLE", "DEFENSE_CURL"]),
-        ("ONIX",      ["TACKLE", "SCREECH", "BIND"]),
-        ("CATERPIE",  ["TACKLE", "STRING_SHOT"]),
-        ("WEEDLE",    ["POISON_STING", "STRING_SHOT"]),
-        ("ODDISH",    ["ABSORB", "POISONPOWDER", "SLEEP_POWDER"]),
-        ("BELLSPROUT",["VINE_WHIP", "GROWTH", "SLEEP_POWDER"]),
-        ("ZUBAT",     ["LEECH_LIFE", "SUPERSONIC"]),
-        ("EKANS",     ["WRAP", "POISON_STING", "LEER"]),
-        ("SANDSHREW", ["SCRATCH", "DEFENSE_CURL", "SAND_ATTACK"]),
-        ("MANKEY",    ["SCRATCH", "LEER", "KARATE_CHOP"]),
-        ("NIDORAN_M", ["TACKLE", "LEER", "POISON_STING"]),
-        ("NIDORAN_F", ["TACKLE", "GROWL", "SCRATCH"]),
-        ("PIKACHU",   ["THUNDERSHOCK", "GROWL", "THUNDER_WAVE"]),
-        ("PARAS",     ["SCRATCH", "STUN_SPORE"]),
-    ]
-    p = starters[rng.integers(0, len(starters))]
-    o = wild_pool[rng.integers(0, len(wild_pool))]
-    player = Pokemon.build(p[0], p_level, p[1])
-    opponent = Pokemon.build(o[0], o_level, o[1])
-    return player, opponent
+    return player_team, opp_team
+
+
+# ---------------------------------------------------------------------------
+# Party-wide HP fraction for reward shaping
+# ---------------------------------------------------------------------------
+
+def _party_hp_frac(party: list[Pokemon]) -> float:
+    """Sum of (hp / max_hp) across all non-empty party slots, normalized by
+    party size.  Fainted = 0 contribution.  Stays in [0, 1]."""
+    if not party:
+        return 0.0
+    total = 0.0
+    for m in party:
+        total += (m.hp / m.max_hp) if m.max_hp else 0.0
+    return total / len(party)
 
 
 # ---------------------------------------------------------------------------
@@ -91,7 +144,7 @@ def _default_teams(rng: np.random.Generator) -> tuple[Pokemon, Pokemon]:
 # ---------------------------------------------------------------------------
 
 class PokemonBattleEnv(gym.Env):
-    """Single-battle Gymnasium env.  Episode = one complete battle."""
+    """6v6 Gymnasium env.  Episode = one complete battle (all of one side KO'd)."""
 
     metadata = {"render_modes": []}
 
@@ -99,7 +152,7 @@ class PokemonBattleEnv(gym.Env):
         self,
         sample_teams=None,
         opponent_policy=None,
-        max_turns: int = 100,
+        max_turns: int = 200,
         seed: int | None = None,
     ) -> None:
         super().__init__()
@@ -108,9 +161,6 @@ class PokemonBattleEnv(gym.Env):
         self._max_turns = max_turns
 
         self.action_space = spaces.Discrete(9)
-        # Thin-obs: just the 36-dim tactical vector.  No screens / map /
-        # events / recent_actions zero-padding — those go through IPC at
-        # ~15 KB/step and dominate the per-step cost in SubprocVecEnv.
         self.observation_space = spaces.Box(
             low=-1.0, high=1.0, shape=(TACTICAL_OBS_SIZE,), dtype=np.float32,
         )
@@ -124,35 +174,42 @@ class PokemonBattleEnv(gym.Env):
 
     def reset(
         self, seed: int | None = None, options: dict | None = None
-    ) -> tuple[dict, dict]:
+    ) -> tuple[np.ndarray, dict]:
         if seed is not None:
             self._rng_np = np.random.default_rng(seed)
             self._battle_rng = BattleRNG(seed)
 
-        player, opponent = self._sample_teams(self._rng_np)
-        self.state = BattleState(player=player, opponent=opponent, battle_type=1)
+        player_team, opp_team = self._sample_teams(self._rng_np)
+        self.state = BattleState(
+            player_party=player_team, opp_party=opp_team, battle_type=1,
+        )
         self.engine = BattleEngine(
             self.state, self._battle_rng, opponent_policy=self._opponent_policy,
         )
-        return self._obs(), {"turn": 0}
+        return self._obs(), {
+            "turn": 0,
+            "player_team_size": len(player_team),
+            "opp_team_size": len(opp_team),
+        }
 
-    def step(self, action: int) -> tuple[dict, float, bool, bool, dict]:
+    def step(self, action: int) -> tuple[np.ndarray, float, bool, bool, dict]:
         assert self.engine is not None and self.state is not None
         s = self.state
 
-        prev_opp_hp = s.opponent.hp / s.opponent.max_hp if s.opponent.max_hp else 0.0
-        prev_our_hp = s.player.hp / s.player.max_hp if s.player.max_hp else 0.0
+        prev_opp_hp = _party_hp_frac(s.opp_party)
+        prev_our_hp = _party_hp_frac(s.player_party)
 
         result = self.engine.step(int(action))
 
-        new_opp_hp = s.opponent.hp / s.opponent.max_hp if s.opponent.max_hp else 0.0
-        new_our_hp = s.player.hp / s.player.max_hp if s.player.max_hp else 0.0
+        new_opp_hp = _party_hp_frac(s.opp_party)
+        new_our_hp = _party_hp_frac(s.player_party)
 
         dealt = max(0.0, prev_opp_hp - new_opp_hp)
         taken = max(0.0, prev_our_hp - new_our_hp)
 
         shaping = dealt - taken
         step_pen = -0.01
+        invalid_pen = INVALID_ACTION_PENALTY if s.last_action_was_invalid else 0.0
 
         if result == BattleResult.PLAYER_WIN:
             terminal_rew = 1.0
@@ -165,12 +222,14 @@ class PokemonBattleEnv(gym.Env):
             terminated = False
 
         truncated = (not terminated) and s.turn >= self._max_turns
-        reward = float(shaping + step_pen + terminal_rew)
+        reward = float(shaping + step_pen + terminal_rew + invalid_pen)
 
         info = {
             "turn": s.turn,
             "result": int(result),
             "events": list(s.last_events),
+            "invalid_action": s.last_action_was_invalid,
+            "active_slot": s.player_active,
         }
         return self._obs(), reward, terminated, truncated, info
 

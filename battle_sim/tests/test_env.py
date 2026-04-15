@@ -1,21 +1,23 @@
-"""Smoke test for the Gymnasium env wrapper."""
+"""Smoke test for the Gymnasium env wrapper (v0.3 thin-obs)."""
 from __future__ import annotations
 
 import numpy as np
 import pytest
 
 from battle_sim.env import PokemonBattleEnv
+from battle_sim.v2_contract import TACTICAL_OBS_SIZE
 
 
 def test_env_reset_and_step():
     env = PokemonBattleEnv(seed=0)
     obs, info = env.reset(seed=0)
-    # Observation space sanity
-    for key, space in env.observation_space.spaces.items():
-        assert key in obs, f"missing {key}"
-        assert obs[key].shape == space.shape, \
-            f"{key} shape {obs[key].shape} != {space.shape}"
+    # v0.3 thin-obs: flat Box(36,) of tactical floats only.
+    assert obs.shape == (TACTICAL_OBS_SIZE,)
+    assert obs.dtype == np.float32
+    assert (obs >= -1.0).all() and (obs <= 1.0).all()
+
     obs, reward, term, trunc, info = env.step(0)
+    assert obs.shape == (TACTICAL_OBS_SIZE,)
     assert isinstance(reward, float)
     assert isinstance(term, bool)
     assert isinstance(trunc, bool)
@@ -38,7 +40,7 @@ def test_env_determinism():
     env2 = PokemonBattleEnv(seed=7)
     o1, _ = env1.reset(seed=7)
     o2, _ = env2.reset(seed=7)
-    np.testing.assert_array_equal(o1["tactical"], o2["tactical"])
+    np.testing.assert_array_equal(o1, o2)
 
     seq1, seq2 = [], []
     for _ in range(10):

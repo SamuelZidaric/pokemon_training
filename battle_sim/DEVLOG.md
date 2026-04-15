@@ -375,12 +375,71 @@ wear-off, Fire-thaw positive case, non-Fire-doesn't-thaw negative case) +2
 in `test_obs_contract.py` (v0.3 one-hot status+stage layout, OK-is-all-zeros),
 plus the 22 → 36 assertion update.  **52 tests total passing.**
 
+### v0.3 speedup — thin-obs + MlpPolicy — 2026-04-15
+
+Mid-v0.3 refactor, before the main 1M-step run.  The v0.1/v0.2 env emitted
+the full-game Dict obs with zero-padded `screens` (72×80×4), `map` (48×48),
+`events` (2232-bit MultiBinary), etc.  The transfer-contract rationale was
+that a policy trained here could be loaded into the full-game env with no
+shape rework — but that has never been needed; weight transfer is
+layer-by-layer, not env-by-env.
+
+**Old per-step cost budget (v0.2, 700 fps per worker):**
+
+| Cost | ~µs | Why |
+|---|---:|---|
+| Engine + effect dispatch | 22 | Pure Gen 1 math |
+| Dict obs build (mostly zeros) | 50-80 | Allocation + copies for 15 KB of padding |
+| Pickle + IPC across SubprocVecEnv boundary | ~200 | 15 KB payload per step |
+| MultiInputPolicy forward (NatureCNN over zero screens!) | 700-900 | Wasted compute on padded tensors |
+| **Total** | ~1,500 | **~670 fps/worker** |
+
+The NatureCNN and the IPC pickle are both pure overhead — neither contributes
+signal the policy can use.
+
+**Changes:**
+
+- `env.py`: `observation_space = Box(-1, 1, (36,), float32)`.  `_obs()` returns
+  `tactical_obs(state)` directly — no Dict wrapper.
+- `train_battle.py`: `policy="MlpPolicy"`, explicit
+  `policy_kwargs=dict(net_arch=dict(pi=[64,64], vf=[64,64]), activation_fn=nn.ReLU)`.
+  Both fields *must* be locked — SB3's default activation is Tanh (wrong),
+  default depth is version-dependent (silent transfer failure risk).
+- `train_battle.py`: `--vec {subproc,dummy}` flag.  DummyVecEnv runs all
+  `num_cpu` envs in one process, no IPC.
+- New test file `tests/test_transfer_compat.py` with 4 tests:
+  1. `policy_net` is `Linear(36→64)→ReLU→Linear(64→64)→ReLU` — shape gate.
+  2. Weight-graft from SB3 policy_net into a mock `PokemonNet.tactical`
+     reproduces the forward pass bit-for-bit — semantic gate.
+  3. `features_extractor` is identity (FlattenExtractor on a Box) — so no
+     hidden pre-norm layer sneaks in.
+  4. Activation is ReLU not Tanh — guard against someone dropping
+     POLICY_KWARGS.
+
+### Benchmark — SubprocVecEnv vs DummyVecEnv (100k steps)
+
+| Config | Wall | Aggregate fps | vs v0.2 |
+|--------|---:|---:|---:|
+| SubprocVecEnv, 4 workers | 14 s | 6,854 | **2.4×** |
+| **DummyVecEnv, 4 envs** (chosen) | **12 s** | **8,163** | **2.9×** |
+| DummyVecEnv, 1 env | 29 s | 3,400 | 1.2× |
+
+DummyVecEnv (single-process, 4 vectorized envs) wins because:
+- Zero pickle cost per step.
+- SB3 batches policy forward across all n_envs in a single call (one
+  tensor of shape `[4, 36]` vs four serial calls of `[36]` each).
+- 4× parallelism from SubprocVecEnv gets ~swallowed by GIL since the
+  engine is pure Python and step latency is ~20 µs.
+
+**Projected 1M-step wall: ~2 min (down from 24 min).** Headline numbers
+for the main run follow.
+
 ### Training Run 3 — v0.3 — PENDING
 
 _Run the training when ready:_
 
 ```bash
-python -m battle_sim.train_battle --num-cpu 4 --steps 1000000 --run-name battle_v0_3
+python -m battle_sim.train_battle --num-cpu 4 --vec dummy --steps 1000000 --run-name battle_v0_3
 ```
 
 Fill this section in after the run completes — same format as Run 2:

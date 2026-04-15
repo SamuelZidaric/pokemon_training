@@ -1,23 +1,25 @@
 """Gymnasium-compatible battle environment for PPO training.
 
-Observation space matches the full-game v2 Dict *exactly* — non-battle fields
-are zero-padded — so a policy trained here can be loaded into the full-game
-PokemonNet with no shape rework.
+v0.3 (thin-obs): emits a flat Box(36,) containing only the tactical vector.
+The full-game Dict obs is intentionally *not* emitted here — we train the
+policy as an MlpPolicy so the first two Linear layers of the policy's MLP
+drop 1:1 into PokemonNet's tactical branch at transfer time.
+
+A PadToFullGameDictWrapper is not needed for transfer (weight copy is direct
+from mlp_extractor.policy_net), only for running the trained policy back in
+the full-game Gym env — not a Week-4 goal.  See DEVLOG v0.3 speedup entry.
 
 Action space is Discrete(9):
     0..3 — use move slot 0..3
-    4..8 — switch to party slot 1..5 (no-op in v0.1, reserved for v0.2)
+    4..8 — switch to party slot 1..5 (no-op until v0.4)
 
-Rewards are lightweight and tactical — the goal of the specialist is to
-shape the tactical branch's feature layer, not invent a new story.
+Rewards are unchanged from v0.2:
     +1.0  on win
     -1.0  on loss
     +Δhp  shaping per turn (opp HP lost − our HP lost, in HP fraction)
     -0.01 step penalty (encourage decisive play)
 """
 from __future__ import annotations
-
-from typing import Any
 
 import gymnasium as gym
 import numpy as np
@@ -27,16 +29,7 @@ from .engine import BattleEngine, BattleResult, BattleState, random_opponent_pol
 from .entities import Pokemon
 from .obs import tactical_obs
 from .rng import BattleRNG
-from .v2_contract import (
-    BADGES_SIZE,
-    EVENTS_SIZE,
-    LEVEL_ENC_SIZE,
-    MAP_SHAPE,
-    NUM_ACTIONS,
-    RECENT_ACTIONS_SIZE,
-    SCREEN_SHAPE,
-    TACTICAL_OBS_SIZE,
-)
+from .v2_contract import TACTICAL_OBS_SIZE
 
 
 # ---------------------------------------------------------------------------
@@ -115,18 +108,12 @@ class PokemonBattleEnv(gym.Env):
         self._max_turns = max_turns
 
         self.action_space = spaces.Discrete(9)
-        self.observation_space = spaces.Dict({
-            "screens": spaces.Box(low=0, high=255, shape=SCREEN_SHAPE, dtype=np.uint8),
-            "health":  spaces.Box(low=0, high=1, shape=(1,), dtype=np.float32),
-            "level":   spaces.Box(low=-1, high=1, shape=(LEVEL_ENC_SIZE,), dtype=np.float32),
-            "badges":  spaces.MultiBinary(BADGES_SIZE),
-            "events":  spaces.MultiBinary(EVENTS_SIZE),
-            "map":     spaces.Box(low=0, high=255, shape=MAP_SHAPE, dtype=np.uint8),
-            "recent_actions": spaces.MultiDiscrete([NUM_ACTIONS] * RECENT_ACTIONS_SIZE),
-            "tactical": spaces.Box(
-                low=-1, high=1, shape=(TACTICAL_OBS_SIZE,), dtype=np.float32
-            ),
-        })
+        # Thin-obs: just the 36-dim tactical vector.  No screens / map /
+        # events / recent_actions zero-padding — those go through IPC at
+        # ~15 KB/step and dominate the per-step cost in SubprocVecEnv.
+        self.observation_space = spaces.Box(
+            low=-1.0, high=1.0, shape=(TACTICAL_OBS_SIZE,), dtype=np.float32,
+        )
 
         self._rng_np = np.random.default_rng(seed)
         self._battle_rng = BattleRNG(seed or 0)
@@ -189,18 +176,6 @@ class PokemonBattleEnv(gym.Env):
 
     # -- observation composition -----------------------------------------
 
-    def _obs(self) -> dict[str, np.ndarray]:
+    def _obs(self) -> np.ndarray:
         assert self.state is not None
-        return {
-            "screens": np.zeros(SCREEN_SHAPE, dtype=np.uint8),
-            "health":  np.array(
-                [self.state.player.hp / max(self.state.player.max_hp, 1)],
-                dtype=np.float32,
-            ),
-            "level":   np.zeros(LEVEL_ENC_SIZE, dtype=np.float32),
-            "badges":  np.zeros(BADGES_SIZE, dtype=np.int8),
-            "events":  np.zeros(EVENTS_SIZE, dtype=np.int8),
-            "map":     np.zeros(MAP_SHAPE, dtype=np.uint8),
-            "recent_actions": np.zeros(RECENT_ACTIONS_SIZE, dtype=np.int64),
-            "tactical": tactical_obs(self.state),
-        }
+        return tactical_obs(self.state)

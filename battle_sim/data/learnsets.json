@@ -1,0 +1,4259 @@
+{
+  "ABRA": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "16",
+        "KADABRA"
+      ]
+    ],
+    "learnset": []
+  },
+  "AERODACTYL": {
+    "evolutions": [],
+    "learnset": [
+      [
+        33,
+        "SUPERSONIC"
+      ],
+      [
+        38,
+        "BITE"
+      ],
+      [
+        45,
+        "TAKE_DOWN"
+      ],
+      [
+        54,
+        "HYPER_BEAM"
+      ]
+    ]
+  },
+  "ALAKAZAM": {
+    "evolutions": [],
+    "learnset": [
+      [
+        16,
+        "CONFUSION"
+      ],
+      [
+        20,
+        "DISABLE"
+      ],
+      [
+        27,
+        "PSYBEAM"
+      ],
+      [
+        31,
+        "RECOVER"
+      ],
+      [
+        38,
+        "PSYCHIC_M"
+      ],
+      [
+        42,
+        "REFLECT"
+      ]
+    ]
+  },
+  "ARBOK": {
+    "evolutions": [],
+    "learnset": [
+      [
+        10,
+        "POISON_STING"
+      ],
+      [
+        17,
+        "BITE"
+      ],
+      [
+        27,
+        "GLARE"
+      ],
+      [
+        36,
+        "SCREECH"
+      ],
+      [
+        47,
+        "ACID"
+      ]
+    ]
+  },
+  "ARCANINE": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "ARTICUNO": {
+    "evolutions": [],
+    "learnset": [
+      [
+        51,
+        "BLIZZARD"
+      ],
+      [
+        55,
+        "AGILITY"
+      ],
+      [
+        60,
+        "MIST"
+      ]
+    ]
+  },
+  "BEEDRILL": {
+    "evolutions": [],
+    "learnset": [
+      [
+        12,
+        "FURY_ATTACK"
+      ],
+      [
+        16,
+        "FOCUS_ENERGY"
+      ],
+      [
+        20,
+        "TWINEEDLE"
+      ],
+      [
+        25,
+        "RAGE"
+      ],
+      [
+        30,
+        "PIN_MISSILE"
+      ],
+      [
+        35,
+        "AGILITY"
+      ]
+    ]
+  },
+  "BELLSPROUT": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "21",
+        "WEEPINBELL"
+      ]
+    ],
+    "learnset": [
+      [
+        13,
+        "WRAP"
+      ],
+      [
+        15,
+        "POISONPOWDER"
+      ],
+      [
+        18,
+        "SLEEP_POWDER"
+      ],
+      [
+        21,
+        "STUN_SPORE"
+      ],
+      [
+        26,
+        "ACID"
+      ],
+      [
+        33,
+        "RAZOR_LEAF"
+      ],
+      [
+        42,
+        "SLAM"
+      ]
+    ]
+  },
+  "BLASTOISE": {
+    "evolutions": [],
+    "learnset": [
+      [
+        8,
+        "BUBBLE"
+      ],
+      [
+        15,
+        "WATER_GUN"
+      ],
+      [
+        24,
+        "BITE"
+      ],
+      [
+        31,
+        "WITHDRAW"
+      ],
+      [
+        42,
+        "SKULL_BASH"
+      ],
+      [
+        52,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "BULBASAUR": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "16",
+        "IVYSAUR"
+      ]
+    ],
+    "learnset": [
+      [
+        7,
+        "LEECH_SEED"
+      ],
+      [
+        13,
+        "VINE_WHIP"
+      ],
+      [
+        20,
+        "POISONPOWDER"
+      ],
+      [
+        27,
+        "RAZOR_LEAF"
+      ],
+      [
+        34,
+        "GROWTH"
+      ],
+      [
+        41,
+        "SLEEP_POWDER"
+      ],
+      [
+        48,
+        "SOLARBEAM"
+      ]
+    ]
+  },
+  "BUTTERFREE": {
+    "evolutions": [],
+    "learnset": [
+      [
+        12,
+        "CONFUSION"
+      ],
+      [
+        15,
+        "POISONPOWDER"
+      ],
+      [
+        16,
+        "STUN_SPORE"
+      ],
+      [
+        17,
+        "SLEEP_POWDER"
+      ],
+      [
+        21,
+        "SUPERSONIC"
+      ],
+      [
+        26,
+        "WHIRLWIND"
+      ],
+      [
+        32,
+        "PSYBEAM"
+      ]
+    ]
+  },
+  "CATERPIE": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "7",
+        "METAPOD"
+      ]
+    ],
+    "learnset": []
+  },
+  "CHANSEY": {
+    "evolutions": [],
+    "learnset": [
+      [
+        24,
+        "SING"
+      ],
+      [
+        30,
+        "GROWL"
+      ],
+      [
+        38,
+        "MINIMIZE"
+      ],
+      [
+        44,
+        "DEFENSE_CURL"
+      ],
+      [
+        48,
+        "LIGHT_SCREEN"
+      ],
+      [
+        54,
+        "DOUBLE_EDGE"
+      ]
+    ]
+  },
+  "CHARIZARD": {
+    "evolutions": [],
+    "learnset": [
+      [
+        9,
+        "EMBER"
+      ],
+      [
+        15,
+        "LEER"
+      ],
+      [
+        24,
+        "RAGE"
+      ],
+      [
+        36,
+        "SLASH"
+      ],
+      [
+        46,
+        "FLAMETHROWER"
+      ],
+      [
+        55,
+        "FIRE_SPIN"
+      ]
+    ]
+  },
+  "CHARMANDER": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "16",
+        "CHARMELEON"
+      ]
+    ],
+    "learnset": [
+      [
+        9,
+        "EMBER"
+      ],
+      [
+        15,
+        "LEER"
+      ],
+      [
+        22,
+        "RAGE"
+      ],
+      [
+        30,
+        "SLASH"
+      ],
+      [
+        38,
+        "FLAMETHROWER"
+      ],
+      [
+        46,
+        "FIRE_SPIN"
+      ]
+    ]
+  },
+  "CHARMELEON": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "36",
+        "CHARIZARD"
+      ]
+    ],
+    "learnset": [
+      [
+        9,
+        "EMBER"
+      ],
+      [
+        15,
+        "LEER"
+      ],
+      [
+        24,
+        "RAGE"
+      ],
+      [
+        33,
+        "SLASH"
+      ],
+      [
+        42,
+        "FLAMETHROWER"
+      ],
+      [
+        56,
+        "FIRE_SPIN"
+      ]
+    ]
+  },
+  "CLEFABLE": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "CLEFAIRY": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "MOON_STONE",
+        "1",
+        "CLEFABLE"
+      ]
+    ],
+    "learnset": [
+      [
+        13,
+        "SING"
+      ],
+      [
+        18,
+        "DOUBLESLAP"
+      ],
+      [
+        24,
+        "MINIMIZE"
+      ],
+      [
+        31,
+        "METRONOME"
+      ],
+      [
+        39,
+        "DEFENSE_CURL"
+      ],
+      [
+        48,
+        "LIGHT_SCREEN"
+      ]
+    ]
+  },
+  "CLOYSTER": {
+    "evolutions": [],
+    "learnset": [
+      [
+        50,
+        "SPIKE_CANNON"
+      ]
+    ]
+  },
+  "CUBONE": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "28",
+        "MAROWAK"
+      ]
+    ],
+    "learnset": [
+      [
+        25,
+        "LEER"
+      ],
+      [
+        31,
+        "FOCUS_ENERGY"
+      ],
+      [
+        38,
+        "THRASH"
+      ],
+      [
+        43,
+        "BONEMERANG"
+      ],
+      [
+        46,
+        "RAGE"
+      ]
+    ]
+  },
+  "DEWGONG": {
+    "evolutions": [],
+    "learnset": [
+      [
+        30,
+        "GROWL"
+      ],
+      [
+        35,
+        "AURORA_BEAM"
+      ],
+      [
+        44,
+        "REST"
+      ],
+      [
+        50,
+        "TAKE_DOWN"
+      ],
+      [
+        56,
+        "ICE_BEAM"
+      ]
+    ]
+  },
+  "DIGLETT": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "26",
+        "DUGTRIO"
+      ]
+    ],
+    "learnset": [
+      [
+        15,
+        "GROWL"
+      ],
+      [
+        19,
+        "DIG"
+      ],
+      [
+        24,
+        "SAND_ATTACK"
+      ],
+      [
+        31,
+        "SLASH"
+      ],
+      [
+        40,
+        "EARTHQUAKE"
+      ]
+    ]
+  },
+  "DITTO": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "DODRIO": {
+    "evolutions": [],
+    "learnset": [
+      [
+        20,
+        "GROWL"
+      ],
+      [
+        24,
+        "FURY_ATTACK"
+      ],
+      [
+        30,
+        "DRILL_PECK"
+      ],
+      [
+        39,
+        "RAGE"
+      ],
+      [
+        45,
+        "TRI_ATTACK"
+      ],
+      [
+        51,
+        "AGILITY"
+      ]
+    ]
+  },
+  "DODUO": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "31",
+        "DODRIO"
+      ]
+    ],
+    "learnset": [
+      [
+        20,
+        "GROWL"
+      ],
+      [
+        24,
+        "FURY_ATTACK"
+      ],
+      [
+        30,
+        "DRILL_PECK"
+      ],
+      [
+        36,
+        "RAGE"
+      ],
+      [
+        40,
+        "TRI_ATTACK"
+      ],
+      [
+        44,
+        "AGILITY"
+      ]
+    ]
+  },
+  "DRAGONAIR": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "55",
+        "DRAGONITE"
+      ]
+    ],
+    "learnset": [
+      [
+        10,
+        "THUNDER_WAVE"
+      ],
+      [
+        20,
+        "AGILITY"
+      ],
+      [
+        35,
+        "SLAM"
+      ],
+      [
+        45,
+        "DRAGON_RAGE"
+      ],
+      [
+        55,
+        "HYPER_BEAM"
+      ]
+    ]
+  },
+  "DRAGONITE": {
+    "evolutions": [],
+    "learnset": [
+      [
+        10,
+        "THUNDER_WAVE"
+      ],
+      [
+        20,
+        "AGILITY"
+      ],
+      [
+        35,
+        "SLAM"
+      ],
+      [
+        45,
+        "DRAGON_RAGE"
+      ],
+      [
+        60,
+        "HYPER_BEAM"
+      ]
+    ]
+  },
+  "DRATINI": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "30",
+        "DRAGONAIR"
+      ]
+    ],
+    "learnset": [
+      [
+        10,
+        "THUNDER_WAVE"
+      ],
+      [
+        20,
+        "AGILITY"
+      ],
+      [
+        30,
+        "SLAM"
+      ],
+      [
+        40,
+        "DRAGON_RAGE"
+      ],
+      [
+        50,
+        "HYPER_BEAM"
+      ]
+    ]
+  },
+  "DROWZEE": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "26",
+        "HYPNO"
+      ]
+    ],
+    "learnset": [
+      [
+        12,
+        "DISABLE"
+      ],
+      [
+        17,
+        "CONFUSION"
+      ],
+      [
+        24,
+        "HEADBUTT"
+      ],
+      [
+        29,
+        "POISON_GAS"
+      ],
+      [
+        32,
+        "PSYCHIC_M"
+      ],
+      [
+        37,
+        "MEDITATE"
+      ]
+    ]
+  },
+  "DUGTRIO": {
+    "evolutions": [],
+    "learnset": [
+      [
+        15,
+        "GROWL"
+      ],
+      [
+        19,
+        "DIG"
+      ],
+      [
+        24,
+        "SAND_ATTACK"
+      ],
+      [
+        35,
+        "SLASH"
+      ],
+      [
+        47,
+        "EARTHQUAKE"
+      ]
+    ]
+  },
+  "EEVEE": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "FIRE_STONE",
+        "1",
+        "FLAREON"
+      ],
+      [
+        "EVOLVE_ITEM",
+        "THUNDER_STONE",
+        "1",
+        "JOLTEON"
+      ],
+      [
+        "EVOLVE_ITEM",
+        "WATER_STONE",
+        "1",
+        "VAPOREON"
+      ]
+    ],
+    "learnset": [
+      [
+        27,
+        "QUICK_ATTACK"
+      ],
+      [
+        31,
+        "TAIL_WHIP"
+      ],
+      [
+        37,
+        "BITE"
+      ],
+      [
+        45,
+        "TAKE_DOWN"
+      ]
+    ]
+  },
+  "EKANS": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "22",
+        "ARBOK"
+      ]
+    ],
+    "learnset": [
+      [
+        10,
+        "POISON_STING"
+      ],
+      [
+        17,
+        "BITE"
+      ],
+      [
+        24,
+        "GLARE"
+      ],
+      [
+        31,
+        "SCREECH"
+      ],
+      [
+        38,
+        "ACID"
+      ]
+    ]
+  },
+  "ELECTABUZZ": {
+    "evolutions": [],
+    "learnset": [
+      [
+        34,
+        "THUNDERSHOCK"
+      ],
+      [
+        37,
+        "SCREECH"
+      ],
+      [
+        42,
+        "THUNDERPUNCH"
+      ],
+      [
+        49,
+        "LIGHT_SCREEN"
+      ],
+      [
+        54,
+        "THUNDER"
+      ]
+    ]
+  },
+  "ELECTRODE": {
+    "evolutions": [],
+    "learnset": [
+      [
+        17,
+        "SONICBOOM"
+      ],
+      [
+        22,
+        "SELFDESTRUCT"
+      ],
+      [
+        29,
+        "LIGHT_SCREEN"
+      ],
+      [
+        40,
+        "SWIFT"
+      ],
+      [
+        50,
+        "EXPLOSION"
+      ]
+    ]
+  },
+  "EXEGGCUTE": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "LEAF_STONE",
+        "1",
+        "EXEGGUTOR"
+      ]
+    ],
+    "learnset": [
+      [
+        25,
+        "REFLECT"
+      ],
+      [
+        28,
+        "LEECH_SEED"
+      ],
+      [
+        32,
+        "STUN_SPORE"
+      ],
+      [
+        37,
+        "POISONPOWDER"
+      ],
+      [
+        42,
+        "SOLARBEAM"
+      ],
+      [
+        48,
+        "SLEEP_POWDER"
+      ]
+    ]
+  },
+  "EXEGGUTOR": {
+    "evolutions": [],
+    "learnset": [
+      [
+        28,
+        "STOMP"
+      ]
+    ]
+  },
+  "FARFETCHD": {
+    "evolutions": [],
+    "learnset": [
+      [
+        7,
+        "LEER"
+      ],
+      [
+        15,
+        "FURY_ATTACK"
+      ],
+      [
+        23,
+        "SWORDS_DANCE"
+      ],
+      [
+        31,
+        "AGILITY"
+      ],
+      [
+        39,
+        "SLASH"
+      ]
+    ]
+  },
+  "FEAROW": {
+    "evolutions": [],
+    "learnset": [
+      [
+        9,
+        "LEER"
+      ],
+      [
+        15,
+        "FURY_ATTACK"
+      ],
+      [
+        25,
+        "MIRROR_MOVE"
+      ],
+      [
+        34,
+        "DRILL_PECK"
+      ],
+      [
+        43,
+        "AGILITY"
+      ]
+    ]
+  },
+  "FLAREON": {
+    "evolutions": [],
+    "learnset": [
+      [
+        27,
+        "QUICK_ATTACK"
+      ],
+      [
+        31,
+        "EMBER"
+      ],
+      [
+        37,
+        "TAIL_WHIP"
+      ],
+      [
+        40,
+        "BITE"
+      ],
+      [
+        42,
+        "LEER"
+      ],
+      [
+        44,
+        "FIRE_SPIN"
+      ],
+      [
+        48,
+        "RAGE"
+      ],
+      [
+        54,
+        "FLAMETHROWER"
+      ]
+    ]
+  },
+  "FOSSILAERODACTYL": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "FOSSILKABUTOPS": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "GASTLY": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "25",
+        "HAUNTER"
+      ]
+    ],
+    "learnset": [
+      [
+        27,
+        "HYPNOSIS"
+      ],
+      [
+        35,
+        "DREAM_EATER"
+      ]
+    ]
+  },
+  "GENGAR": {
+    "evolutions": [],
+    "learnset": [
+      [
+        29,
+        "HYPNOSIS"
+      ],
+      [
+        38,
+        "DREAM_EATER"
+      ]
+    ]
+  },
+  "GEODUDE": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "25",
+        "GRAVELER"
+      ]
+    ],
+    "learnset": [
+      [
+        11,
+        "DEFENSE_CURL"
+      ],
+      [
+        16,
+        "ROCK_THROW"
+      ],
+      [
+        21,
+        "SELFDESTRUCT"
+      ],
+      [
+        26,
+        "HARDEN"
+      ],
+      [
+        31,
+        "EARTHQUAKE"
+      ],
+      [
+        36,
+        "EXPLOSION"
+      ]
+    ]
+  },
+  "GLOOM": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "LEAF_STONE",
+        "1",
+        "VILEPLUME"
+      ]
+    ],
+    "learnset": [
+      [
+        15,
+        "POISONPOWDER"
+      ],
+      [
+        17,
+        "STUN_SPORE"
+      ],
+      [
+        19,
+        "SLEEP_POWDER"
+      ],
+      [
+        28,
+        "ACID"
+      ],
+      [
+        38,
+        "PETAL_DANCE"
+      ],
+      [
+        52,
+        "SOLARBEAM"
+      ]
+    ]
+  },
+  "GOLBAT": {
+    "evolutions": [],
+    "learnset": [
+      [
+        10,
+        "SUPERSONIC"
+      ],
+      [
+        15,
+        "BITE"
+      ],
+      [
+        21,
+        "CONFUSE_RAY"
+      ],
+      [
+        32,
+        "WING_ATTACK"
+      ],
+      [
+        43,
+        "HAZE"
+      ]
+    ]
+  },
+  "GOLDEEN": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "33",
+        "SEAKING"
+      ]
+    ],
+    "learnset": [
+      [
+        19,
+        "SUPERSONIC"
+      ],
+      [
+        24,
+        "HORN_ATTACK"
+      ],
+      [
+        30,
+        "FURY_ATTACK"
+      ],
+      [
+        37,
+        "WATERFALL"
+      ],
+      [
+        45,
+        "HORN_DRILL"
+      ],
+      [
+        54,
+        "AGILITY"
+      ]
+    ]
+  },
+  "GOLDUCK": {
+    "evolutions": [],
+    "learnset": [
+      [
+        28,
+        "TAIL_WHIP"
+      ],
+      [
+        31,
+        "DISABLE"
+      ],
+      [
+        39,
+        "CONFUSION"
+      ],
+      [
+        48,
+        "FURY_SWIPES"
+      ],
+      [
+        59,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "GOLEM": {
+    "evolutions": [],
+    "learnset": [
+      [
+        11,
+        "DEFENSE_CURL"
+      ],
+      [
+        16,
+        "ROCK_THROW"
+      ],
+      [
+        21,
+        "SELFDESTRUCT"
+      ],
+      [
+        29,
+        "HARDEN"
+      ],
+      [
+        36,
+        "EARTHQUAKE"
+      ],
+      [
+        43,
+        "EXPLOSION"
+      ]
+    ]
+  },
+  "GRAVELER": {
+    "evolutions": [
+      [
+        "EVOLVE_TRADE",
+        "1",
+        "GOLEM"
+      ]
+    ],
+    "learnset": [
+      [
+        11,
+        "DEFENSE_CURL"
+      ],
+      [
+        16,
+        "ROCK_THROW"
+      ],
+      [
+        21,
+        "SELFDESTRUCT"
+      ],
+      [
+        29,
+        "HARDEN"
+      ],
+      [
+        36,
+        "EARTHQUAKE"
+      ],
+      [
+        43,
+        "EXPLOSION"
+      ]
+    ]
+  },
+  "GRIMER": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "38",
+        "MUK"
+      ]
+    ],
+    "learnset": [
+      [
+        30,
+        "POISON_GAS"
+      ],
+      [
+        33,
+        "MINIMIZE"
+      ],
+      [
+        37,
+        "SLUDGE"
+      ],
+      [
+        42,
+        "HARDEN"
+      ],
+      [
+        48,
+        "SCREECH"
+      ],
+      [
+        55,
+        "ACID_ARMOR"
+      ]
+    ]
+  },
+  "GROWLITHE": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "FIRE_STONE",
+        "1",
+        "ARCANINE"
+      ]
+    ],
+    "learnset": [
+      [
+        18,
+        "EMBER"
+      ],
+      [
+        23,
+        "LEER"
+      ],
+      [
+        30,
+        "TAKE_DOWN"
+      ],
+      [
+        39,
+        "AGILITY"
+      ],
+      [
+        50,
+        "FLAMETHROWER"
+      ]
+    ]
+  },
+  "GYARADOS": {
+    "evolutions": [],
+    "learnset": [
+      [
+        20,
+        "BITE"
+      ],
+      [
+        25,
+        "DRAGON_RAGE"
+      ],
+      [
+        32,
+        "LEER"
+      ],
+      [
+        41,
+        "HYDRO_PUMP"
+      ],
+      [
+        52,
+        "HYPER_BEAM"
+      ]
+    ]
+  },
+  "HAUNTER": {
+    "evolutions": [
+      [
+        "EVOLVE_TRADE",
+        "1",
+        "GENGAR"
+      ]
+    ],
+    "learnset": [
+      [
+        29,
+        "HYPNOSIS"
+      ],
+      [
+        38,
+        "DREAM_EATER"
+      ]
+    ]
+  },
+  "HITMONCHAN": {
+    "evolutions": [],
+    "learnset": [
+      [
+        33,
+        "FIRE_PUNCH"
+      ],
+      [
+        38,
+        "ICE_PUNCH"
+      ],
+      [
+        43,
+        "THUNDERPUNCH"
+      ],
+      [
+        48,
+        "MEGA_PUNCH"
+      ],
+      [
+        53,
+        "COUNTER"
+      ]
+    ]
+  },
+  "HITMONLEE": {
+    "evolutions": [],
+    "learnset": [
+      [
+        33,
+        "ROLLING_KICK"
+      ],
+      [
+        38,
+        "JUMP_KICK"
+      ],
+      [
+        43,
+        "FOCUS_ENERGY"
+      ],
+      [
+        48,
+        "HI_JUMP_KICK"
+      ],
+      [
+        53,
+        "MEGA_KICK"
+      ]
+    ]
+  },
+  "HORSEA": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "32",
+        "SEADRA"
+      ]
+    ],
+    "learnset": [
+      [
+        19,
+        "SMOKESCREEN"
+      ],
+      [
+        24,
+        "LEER"
+      ],
+      [
+        30,
+        "WATER_GUN"
+      ],
+      [
+        37,
+        "AGILITY"
+      ],
+      [
+        45,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "HYPNO": {
+    "evolutions": [],
+    "learnset": [
+      [
+        12,
+        "DISABLE"
+      ],
+      [
+        17,
+        "CONFUSION"
+      ],
+      [
+        24,
+        "HEADBUTT"
+      ],
+      [
+        33,
+        "POISON_GAS"
+      ],
+      [
+        37,
+        "PSYCHIC_M"
+      ],
+      [
+        43,
+        "MEDITATE"
+      ]
+    ]
+  },
+  "IVYSAUR": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "32",
+        "VENUSAUR"
+      ]
+    ],
+    "learnset": [
+      [
+        7,
+        "LEECH_SEED"
+      ],
+      [
+        13,
+        "VINE_WHIP"
+      ],
+      [
+        22,
+        "POISONPOWDER"
+      ],
+      [
+        30,
+        "RAZOR_LEAF"
+      ],
+      [
+        38,
+        "GROWTH"
+      ],
+      [
+        46,
+        "SLEEP_POWDER"
+      ],
+      [
+        54,
+        "SOLARBEAM"
+      ]
+    ]
+  },
+  "JIGGLYPUFF": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "MOON_STONE",
+        "1",
+        "WIGGLYTUFF"
+      ]
+    ],
+    "learnset": [
+      [
+        9,
+        "POUND"
+      ],
+      [
+        14,
+        "DISABLE"
+      ],
+      [
+        19,
+        "DEFENSE_CURL"
+      ],
+      [
+        24,
+        "DOUBLESLAP"
+      ],
+      [
+        29,
+        "REST"
+      ],
+      [
+        34,
+        "BODY_SLAM"
+      ],
+      [
+        39,
+        "DOUBLE_EDGE"
+      ]
+    ]
+  },
+  "JOLTEON": {
+    "evolutions": [],
+    "learnset": [
+      [
+        27,
+        "QUICK_ATTACK"
+      ],
+      [
+        31,
+        "THUNDERSHOCK"
+      ],
+      [
+        37,
+        "TAIL_WHIP"
+      ],
+      [
+        40,
+        "THUNDER_WAVE"
+      ],
+      [
+        42,
+        "DOUBLE_KICK"
+      ],
+      [
+        44,
+        "AGILITY"
+      ],
+      [
+        48,
+        "PIN_MISSILE"
+      ],
+      [
+        54,
+        "THUNDER"
+      ]
+    ]
+  },
+  "JYNX": {
+    "evolutions": [],
+    "learnset": [
+      [
+        18,
+        "LICK"
+      ],
+      [
+        23,
+        "DOUBLESLAP"
+      ],
+      [
+        31,
+        "ICE_PUNCH"
+      ],
+      [
+        39,
+        "BODY_SLAM"
+      ],
+      [
+        47,
+        "THRASH"
+      ],
+      [
+        58,
+        "BLIZZARD"
+      ]
+    ]
+  },
+  "KABUTO": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "40",
+        "KABUTOPS"
+      ]
+    ],
+    "learnset": [
+      [
+        34,
+        "ABSORB"
+      ],
+      [
+        39,
+        "SLASH"
+      ],
+      [
+        44,
+        "LEER"
+      ],
+      [
+        49,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "KABUTOPS": {
+    "evolutions": [],
+    "learnset": [
+      [
+        34,
+        "ABSORB"
+      ],
+      [
+        39,
+        "SLASH"
+      ],
+      [
+        46,
+        "LEER"
+      ],
+      [
+        53,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "KADABRA": {
+    "evolutions": [
+      [
+        "EVOLVE_TRADE",
+        "1",
+        "ALAKAZAM"
+      ]
+    ],
+    "learnset": [
+      [
+        16,
+        "CONFUSION"
+      ],
+      [
+        20,
+        "DISABLE"
+      ],
+      [
+        27,
+        "PSYBEAM"
+      ],
+      [
+        31,
+        "RECOVER"
+      ],
+      [
+        38,
+        "PSYCHIC_M"
+      ],
+      [
+        42,
+        "REFLECT"
+      ]
+    ]
+  },
+  "KAKUNA": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "10",
+        "BEEDRILL"
+      ]
+    ],
+    "learnset": []
+  },
+  "KANGASKHAN": {
+    "evolutions": [],
+    "learnset": [
+      [
+        26,
+        "BITE"
+      ],
+      [
+        31,
+        "TAIL_WHIP"
+      ],
+      [
+        36,
+        "MEGA_PUNCH"
+      ],
+      [
+        41,
+        "LEER"
+      ],
+      [
+        46,
+        "DIZZY_PUNCH"
+      ]
+    ]
+  },
+  "KINGLER": {
+    "evolutions": [],
+    "learnset": [
+      [
+        20,
+        "VICEGRIP"
+      ],
+      [
+        25,
+        "GUILLOTINE"
+      ],
+      [
+        34,
+        "STOMP"
+      ],
+      [
+        42,
+        "CRABHAMMER"
+      ],
+      [
+        49,
+        "HARDEN"
+      ]
+    ]
+  },
+  "KOFFING": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "35",
+        "WEEZING"
+      ]
+    ],
+    "learnset": [
+      [
+        32,
+        "SLUDGE"
+      ],
+      [
+        37,
+        "SMOKESCREEN"
+      ],
+      [
+        40,
+        "SELFDESTRUCT"
+      ],
+      [
+        45,
+        "HAZE"
+      ],
+      [
+        48,
+        "EXPLOSION"
+      ]
+    ]
+  },
+  "KRABBY": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "28",
+        "KINGLER"
+      ]
+    ],
+    "learnset": [
+      [
+        20,
+        "VICEGRIP"
+      ],
+      [
+        25,
+        "GUILLOTINE"
+      ],
+      [
+        30,
+        "STOMP"
+      ],
+      [
+        35,
+        "CRABHAMMER"
+      ],
+      [
+        40,
+        "HARDEN"
+      ]
+    ]
+  },
+  "LAPRAS": {
+    "evolutions": [],
+    "learnset": [
+      [
+        16,
+        "SING"
+      ],
+      [
+        20,
+        "MIST"
+      ],
+      [
+        25,
+        "BODY_SLAM"
+      ],
+      [
+        31,
+        "CONFUSE_RAY"
+      ],
+      [
+        38,
+        "ICE_BEAM"
+      ],
+      [
+        46,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "LICKITUNG": {
+    "evolutions": [],
+    "learnset": [
+      [
+        7,
+        "STOMP"
+      ],
+      [
+        15,
+        "DISABLE"
+      ],
+      [
+        23,
+        "DEFENSE_CURL"
+      ],
+      [
+        31,
+        "SLAM"
+      ],
+      [
+        39,
+        "SCREECH"
+      ]
+    ]
+  },
+  "MACHAMP": {
+    "evolutions": [],
+    "learnset": [
+      [
+        20,
+        "LOW_KICK"
+      ],
+      [
+        25,
+        "LEER"
+      ],
+      [
+        36,
+        "FOCUS_ENERGY"
+      ],
+      [
+        44,
+        "SEISMIC_TOSS"
+      ],
+      [
+        52,
+        "SUBMISSION"
+      ]
+    ]
+  },
+  "MACHOKE": {
+    "evolutions": [
+      [
+        "EVOLVE_TRADE",
+        "1",
+        "MACHAMP"
+      ]
+    ],
+    "learnset": [
+      [
+        20,
+        "LOW_KICK"
+      ],
+      [
+        25,
+        "LEER"
+      ],
+      [
+        36,
+        "FOCUS_ENERGY"
+      ],
+      [
+        44,
+        "SEISMIC_TOSS"
+      ],
+      [
+        52,
+        "SUBMISSION"
+      ]
+    ]
+  },
+  "MACHOP": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "28",
+        "MACHOKE"
+      ]
+    ],
+    "learnset": [
+      [
+        20,
+        "LOW_KICK"
+      ],
+      [
+        25,
+        "LEER"
+      ],
+      [
+        32,
+        "FOCUS_ENERGY"
+      ],
+      [
+        39,
+        "SEISMIC_TOSS"
+      ],
+      [
+        46,
+        "SUBMISSION"
+      ]
+    ]
+  },
+  "MAGIKARP": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "20",
+        "GYARADOS"
+      ]
+    ],
+    "learnset": [
+      [
+        15,
+        "TACKLE"
+      ]
+    ]
+  },
+  "MAGMAR": {
+    "evolutions": [],
+    "learnset": [
+      [
+        36,
+        "LEER"
+      ],
+      [
+        39,
+        "CONFUSE_RAY"
+      ],
+      [
+        43,
+        "FIRE_PUNCH"
+      ],
+      [
+        48,
+        "SMOKESCREEN"
+      ],
+      [
+        52,
+        "SMOG"
+      ],
+      [
+        55,
+        "FLAMETHROWER"
+      ]
+    ]
+  },
+  "MAGNEMITE": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "30",
+        "MAGNETON"
+      ]
+    ],
+    "learnset": [
+      [
+        21,
+        "SONICBOOM"
+      ],
+      [
+        25,
+        "THUNDERSHOCK"
+      ],
+      [
+        29,
+        "SUPERSONIC"
+      ],
+      [
+        35,
+        "THUNDER_WAVE"
+      ],
+      [
+        41,
+        "SWIFT"
+      ],
+      [
+        47,
+        "SCREECH"
+      ]
+    ]
+  },
+  "MAGNETON": {
+    "evolutions": [],
+    "learnset": [
+      [
+        21,
+        "SONICBOOM"
+      ],
+      [
+        25,
+        "THUNDERSHOCK"
+      ],
+      [
+        29,
+        "SUPERSONIC"
+      ],
+      [
+        38,
+        "THUNDER_WAVE"
+      ],
+      [
+        46,
+        "SWIFT"
+      ],
+      [
+        54,
+        "SCREECH"
+      ]
+    ]
+  },
+  "MANKEY": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "28",
+        "PRIMEAPE"
+      ]
+    ],
+    "learnset": [
+      [
+        15,
+        "KARATE_CHOP"
+      ],
+      [
+        21,
+        "FURY_SWIPES"
+      ],
+      [
+        27,
+        "FOCUS_ENERGY"
+      ],
+      [
+        33,
+        "SEISMIC_TOSS"
+      ],
+      [
+        39,
+        "THRASH"
+      ]
+    ]
+  },
+  "MAROWAK": {
+    "evolutions": [],
+    "learnset": [
+      [
+        25,
+        "LEER"
+      ],
+      [
+        33,
+        "FOCUS_ENERGY"
+      ],
+      [
+        41,
+        "THRASH"
+      ],
+      [
+        48,
+        "BONEMERANG"
+      ],
+      [
+        55,
+        "RAGE"
+      ]
+    ]
+  },
+  "MEOWTH": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "28",
+        "PERSIAN"
+      ]
+    ],
+    "learnset": [
+      [
+        12,
+        "BITE"
+      ],
+      [
+        17,
+        "PAY_DAY"
+      ],
+      [
+        24,
+        "SCREECH"
+      ],
+      [
+        33,
+        "FURY_SWIPES"
+      ],
+      [
+        44,
+        "SLASH"
+      ]
+    ]
+  },
+  "METAPOD": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "10",
+        "BUTTERFREE"
+      ]
+    ],
+    "learnset": []
+  },
+  "MEW": {
+    "evolutions": [],
+    "learnset": [
+      [
+        10,
+        "TRANSFORM"
+      ],
+      [
+        20,
+        "MEGA_PUNCH"
+      ],
+      [
+        30,
+        "METRONOME"
+      ],
+      [
+        40,
+        "PSYCHIC_M"
+      ]
+    ]
+  },
+  "MEWTWO": {
+    "evolutions": [],
+    "learnset": [
+      [
+        63,
+        "BARRIER"
+      ],
+      [
+        66,
+        "PSYCHIC_M"
+      ],
+      [
+        70,
+        "RECOVER"
+      ],
+      [
+        75,
+        "MIST"
+      ],
+      [
+        81,
+        "AMNESIA"
+      ]
+    ]
+  },
+  "MISSINGNO1F": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO20": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO32": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO34": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO38": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO3D": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO3E": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO3F": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO43": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO44": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO45": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO4F": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO50": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO51": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO56": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO57": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO5E": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO5F": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO73": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO79": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO7A": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO7F": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO86": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO87": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO8A": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO8C": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO92": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO9C": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNO9F": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNOA0": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNOA1": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNOA2": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNOAC": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNOAE": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNOAF": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MISSINGNOB5": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MOLTRES": {
+    "evolutions": [],
+    "learnset": [
+      [
+        51,
+        "LEER"
+      ],
+      [
+        55,
+        "AGILITY"
+      ],
+      [
+        60,
+        "SKY_ATTACK"
+      ]
+    ]
+  },
+  "MONGHOST": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "MRMIME": {
+    "evolutions": [],
+    "learnset": [
+      [
+        15,
+        "CONFUSION"
+      ],
+      [
+        23,
+        "LIGHT_SCREEN"
+      ],
+      [
+        31,
+        "DOUBLESLAP"
+      ],
+      [
+        39,
+        "MEDITATE"
+      ],
+      [
+        47,
+        "SUBSTITUTE"
+      ]
+    ]
+  },
+  "MUK": {
+    "evolutions": [],
+    "learnset": [
+      [
+        30,
+        "POISON_GAS"
+      ],
+      [
+        33,
+        "MINIMIZE"
+      ],
+      [
+        37,
+        "SLUDGE"
+      ],
+      [
+        45,
+        "HARDEN"
+      ],
+      [
+        53,
+        "SCREECH"
+      ],
+      [
+        60,
+        "ACID_ARMOR"
+      ]
+    ]
+  },
+  "NIDOKING": {
+    "evolutions": [],
+    "learnset": [
+      [
+        8,
+        "HORN_ATTACK"
+      ],
+      [
+        14,
+        "POISON_STING"
+      ],
+      [
+        23,
+        "THRASH"
+      ]
+    ]
+  },
+  "NIDOQUEEN": {
+    "evolutions": [],
+    "learnset": [
+      [
+        8,
+        "SCRATCH"
+      ],
+      [
+        14,
+        "POISON_STING"
+      ],
+      [
+        23,
+        "BODY_SLAM"
+      ]
+    ]
+  },
+  "NIDORANF": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "16",
+        "NIDORINA"
+      ]
+    ],
+    "learnset": [
+      [
+        8,
+        "SCRATCH"
+      ],
+      [
+        14,
+        "POISON_STING"
+      ],
+      [
+        21,
+        "TAIL_WHIP"
+      ],
+      [
+        29,
+        "BITE"
+      ],
+      [
+        36,
+        "FURY_SWIPES"
+      ],
+      [
+        43,
+        "DOUBLE_KICK"
+      ]
+    ]
+  },
+  "NIDORANM": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "16",
+        "NIDORINO"
+      ]
+    ],
+    "learnset": [
+      [
+        8,
+        "HORN_ATTACK"
+      ],
+      [
+        14,
+        "POISON_STING"
+      ],
+      [
+        21,
+        "FOCUS_ENERGY"
+      ],
+      [
+        29,
+        "FURY_ATTACK"
+      ],
+      [
+        36,
+        "HORN_DRILL"
+      ],
+      [
+        43,
+        "DOUBLE_KICK"
+      ]
+    ]
+  },
+  "NIDORINA": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "MOON_STONE",
+        "1",
+        "NIDOQUEEN"
+      ]
+    ],
+    "learnset": [
+      [
+        8,
+        "SCRATCH"
+      ],
+      [
+        14,
+        "POISON_STING"
+      ],
+      [
+        23,
+        "TAIL_WHIP"
+      ],
+      [
+        32,
+        "BITE"
+      ],
+      [
+        41,
+        "FURY_SWIPES"
+      ],
+      [
+        50,
+        "DOUBLE_KICK"
+      ]
+    ]
+  },
+  "NIDORINO": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "MOON_STONE",
+        "1",
+        "NIDOKING"
+      ]
+    ],
+    "learnset": [
+      [
+        8,
+        "HORN_ATTACK"
+      ],
+      [
+        14,
+        "POISON_STING"
+      ],
+      [
+        23,
+        "FOCUS_ENERGY"
+      ],
+      [
+        32,
+        "FURY_ATTACK"
+      ],
+      [
+        41,
+        "HORN_DRILL"
+      ],
+      [
+        50,
+        "DOUBLE_KICK"
+      ]
+    ]
+  },
+  "NINETALES": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "ODDISH": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "21",
+        "GLOOM"
+      ]
+    ],
+    "learnset": [
+      [
+        15,
+        "POISONPOWDER"
+      ],
+      [
+        17,
+        "STUN_SPORE"
+      ],
+      [
+        19,
+        "SLEEP_POWDER"
+      ],
+      [
+        24,
+        "ACID"
+      ],
+      [
+        33,
+        "PETAL_DANCE"
+      ],
+      [
+        46,
+        "SOLARBEAM"
+      ]
+    ]
+  },
+  "OMANYTE": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "40",
+        "OMASTAR"
+      ]
+    ],
+    "learnset": [
+      [
+        34,
+        "HORN_ATTACK"
+      ],
+      [
+        39,
+        "LEER"
+      ],
+      [
+        46,
+        "SPIKE_CANNON"
+      ],
+      [
+        53,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "OMASTAR": {
+    "evolutions": [],
+    "learnset": [
+      [
+        34,
+        "HORN_ATTACK"
+      ],
+      [
+        39,
+        "LEER"
+      ],
+      [
+        44,
+        "SPIKE_CANNON"
+      ],
+      [
+        49,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "ONIX": {
+    "evolutions": [],
+    "learnset": [
+      [
+        15,
+        "BIND"
+      ],
+      [
+        19,
+        "ROCK_THROW"
+      ],
+      [
+        25,
+        "RAGE"
+      ],
+      [
+        33,
+        "SLAM"
+      ],
+      [
+        43,
+        "HARDEN"
+      ]
+    ]
+  },
+  "PARAS": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "24",
+        "PARASECT"
+      ]
+    ],
+    "learnset": [
+      [
+        13,
+        "STUN_SPORE"
+      ],
+      [
+        20,
+        "LEECH_LIFE"
+      ],
+      [
+        27,
+        "SPORE"
+      ],
+      [
+        34,
+        "SLASH"
+      ],
+      [
+        41,
+        "GROWTH"
+      ]
+    ]
+  },
+  "PARASECT": {
+    "evolutions": [],
+    "learnset": [
+      [
+        13,
+        "STUN_SPORE"
+      ],
+      [
+        20,
+        "LEECH_LIFE"
+      ],
+      [
+        30,
+        "SPORE"
+      ],
+      [
+        39,
+        "SLASH"
+      ],
+      [
+        48,
+        "GROWTH"
+      ]
+    ]
+  },
+  "PERSIAN": {
+    "evolutions": [],
+    "learnset": [
+      [
+        12,
+        "BITE"
+      ],
+      [
+        17,
+        "PAY_DAY"
+      ],
+      [
+        24,
+        "SCREECH"
+      ],
+      [
+        37,
+        "FURY_SWIPES"
+      ],
+      [
+        51,
+        "SLASH"
+      ]
+    ]
+  },
+  "PIDGEOT": {
+    "evolutions": [],
+    "learnset": [
+      [
+        5,
+        "SAND_ATTACK"
+      ],
+      [
+        12,
+        "QUICK_ATTACK"
+      ],
+      [
+        21,
+        "WHIRLWIND"
+      ],
+      [
+        31,
+        "WING_ATTACK"
+      ],
+      [
+        44,
+        "AGILITY"
+      ],
+      [
+        54,
+        "MIRROR_MOVE"
+      ]
+    ]
+  },
+  "PIDGEOTTO": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "36",
+        "PIDGEOT"
+      ]
+    ],
+    "learnset": [
+      [
+        5,
+        "SAND_ATTACK"
+      ],
+      [
+        12,
+        "QUICK_ATTACK"
+      ],
+      [
+        21,
+        "WHIRLWIND"
+      ],
+      [
+        31,
+        "WING_ATTACK"
+      ],
+      [
+        40,
+        "AGILITY"
+      ],
+      [
+        49,
+        "MIRROR_MOVE"
+      ]
+    ]
+  },
+  "PIDGEY": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "18",
+        "PIDGEOTTO"
+      ]
+    ],
+    "learnset": [
+      [
+        5,
+        "SAND_ATTACK"
+      ],
+      [
+        12,
+        "QUICK_ATTACK"
+      ],
+      [
+        19,
+        "WHIRLWIND"
+      ],
+      [
+        28,
+        "WING_ATTACK"
+      ],
+      [
+        36,
+        "AGILITY"
+      ],
+      [
+        44,
+        "MIRROR_MOVE"
+      ]
+    ]
+  },
+  "PIKACHU": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "THUNDER_STONE",
+        "1",
+        "RAICHU"
+      ]
+    ],
+    "learnset": [
+      [
+        9,
+        "THUNDER_WAVE"
+      ],
+      [
+        16,
+        "QUICK_ATTACK"
+      ],
+      [
+        26,
+        "SWIFT"
+      ],
+      [
+        33,
+        "AGILITY"
+      ],
+      [
+        43,
+        "THUNDER"
+      ]
+    ]
+  },
+  "PINSIR": {
+    "evolutions": [],
+    "learnset": [
+      [
+        25,
+        "SEISMIC_TOSS"
+      ],
+      [
+        30,
+        "GUILLOTINE"
+      ],
+      [
+        36,
+        "FOCUS_ENERGY"
+      ],
+      [
+        43,
+        "HARDEN"
+      ],
+      [
+        49,
+        "SLASH"
+      ],
+      [
+        54,
+        "SWORDS_DANCE"
+      ]
+    ]
+  },
+  "POLIWAG": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "25",
+        "POLIWHIRL"
+      ]
+    ],
+    "learnset": [
+      [
+        16,
+        "HYPNOSIS"
+      ],
+      [
+        19,
+        "WATER_GUN"
+      ],
+      [
+        25,
+        "DOUBLESLAP"
+      ],
+      [
+        31,
+        "BODY_SLAM"
+      ],
+      [
+        38,
+        "AMNESIA"
+      ],
+      [
+        45,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "POLIWHIRL": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "WATER_STONE",
+        "1",
+        "POLIWRATH"
+      ]
+    ],
+    "learnset": [
+      [
+        16,
+        "HYPNOSIS"
+      ],
+      [
+        19,
+        "WATER_GUN"
+      ],
+      [
+        26,
+        "DOUBLESLAP"
+      ],
+      [
+        33,
+        "BODY_SLAM"
+      ],
+      [
+        41,
+        "AMNESIA"
+      ],
+      [
+        49,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "POLIWRATH": {
+    "evolutions": [],
+    "learnset": [
+      [
+        16,
+        "HYPNOSIS"
+      ],
+      [
+        19,
+        "WATER_GUN"
+      ]
+    ]
+  },
+  "PONYTA": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "40",
+        "RAPIDASH"
+      ]
+    ],
+    "learnset": [
+      [
+        30,
+        "TAIL_WHIP"
+      ],
+      [
+        32,
+        "STOMP"
+      ],
+      [
+        35,
+        "GROWL"
+      ],
+      [
+        39,
+        "FIRE_SPIN"
+      ],
+      [
+        43,
+        "TAKE_DOWN"
+      ],
+      [
+        48,
+        "AGILITY"
+      ]
+    ]
+  },
+  "PORYGON": {
+    "evolutions": [],
+    "learnset": [
+      [
+        23,
+        "PSYBEAM"
+      ],
+      [
+        28,
+        "RECOVER"
+      ],
+      [
+        35,
+        "AGILITY"
+      ],
+      [
+        42,
+        "TRI_ATTACK"
+      ]
+    ]
+  },
+  "PRIMEAPE": {
+    "evolutions": [],
+    "learnset": [
+      [
+        15,
+        "KARATE_CHOP"
+      ],
+      [
+        21,
+        "FURY_SWIPES"
+      ],
+      [
+        27,
+        "FOCUS_ENERGY"
+      ],
+      [
+        37,
+        "SEISMIC_TOSS"
+      ],
+      [
+        46,
+        "THRASH"
+      ]
+    ]
+  },
+  "PSYDUCK": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "33",
+        "GOLDUCK"
+      ]
+    ],
+    "learnset": [
+      [
+        28,
+        "TAIL_WHIP"
+      ],
+      [
+        31,
+        "DISABLE"
+      ],
+      [
+        36,
+        "CONFUSION"
+      ],
+      [
+        43,
+        "FURY_SWIPES"
+      ],
+      [
+        52,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "RAICHU": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "RAPIDASH": {
+    "evolutions": [],
+    "learnset": [
+      [
+        30,
+        "TAIL_WHIP"
+      ],
+      [
+        32,
+        "STOMP"
+      ],
+      [
+        35,
+        "GROWL"
+      ],
+      [
+        39,
+        "FIRE_SPIN"
+      ],
+      [
+        47,
+        "TAKE_DOWN"
+      ],
+      [
+        55,
+        "AGILITY"
+      ]
+    ]
+  },
+  "RATICATE": {
+    "evolutions": [],
+    "learnset": [
+      [
+        7,
+        "QUICK_ATTACK"
+      ],
+      [
+        14,
+        "HYPER_FANG"
+      ],
+      [
+        27,
+        "FOCUS_ENERGY"
+      ],
+      [
+        41,
+        "SUPER_FANG"
+      ]
+    ]
+  },
+  "RATTATA": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "20",
+        "RATICATE"
+      ]
+    ],
+    "learnset": [
+      [
+        7,
+        "QUICK_ATTACK"
+      ],
+      [
+        14,
+        "HYPER_FANG"
+      ],
+      [
+        23,
+        "FOCUS_ENERGY"
+      ],
+      [
+        34,
+        "SUPER_FANG"
+      ]
+    ]
+  },
+  "RHYDON": {
+    "evolutions": [],
+    "learnset": [
+      [
+        30,
+        "STOMP"
+      ],
+      [
+        35,
+        "TAIL_WHIP"
+      ],
+      [
+        40,
+        "FURY_ATTACK"
+      ],
+      [
+        48,
+        "HORN_DRILL"
+      ],
+      [
+        55,
+        "LEER"
+      ],
+      [
+        64,
+        "TAKE_DOWN"
+      ]
+    ]
+  },
+  "RHYHORN": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "42",
+        "RHYDON"
+      ]
+    ],
+    "learnset": [
+      [
+        30,
+        "STOMP"
+      ],
+      [
+        35,
+        "TAIL_WHIP"
+      ],
+      [
+        40,
+        "FURY_ATTACK"
+      ],
+      [
+        45,
+        "HORN_DRILL"
+      ],
+      [
+        50,
+        "LEER"
+      ],
+      [
+        55,
+        "TAKE_DOWN"
+      ]
+    ]
+  },
+  "SANDSHREW": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "22",
+        "SANDSLASH"
+      ]
+    ],
+    "learnset": [
+      [
+        10,
+        "SAND_ATTACK"
+      ],
+      [
+        17,
+        "SLASH"
+      ],
+      [
+        24,
+        "POISON_STING"
+      ],
+      [
+        31,
+        "SWIFT"
+      ],
+      [
+        38,
+        "FURY_SWIPES"
+      ]
+    ]
+  },
+  "SANDSLASH": {
+    "evolutions": [],
+    "learnset": [
+      [
+        10,
+        "SAND_ATTACK"
+      ],
+      [
+        17,
+        "SLASH"
+      ],
+      [
+        27,
+        "POISON_STING"
+      ],
+      [
+        36,
+        "SWIFT"
+      ],
+      [
+        47,
+        "FURY_SWIPES"
+      ]
+    ]
+  },
+  "SCYTHER": {
+    "evolutions": [],
+    "learnset": [
+      [
+        17,
+        "LEER"
+      ],
+      [
+        20,
+        "FOCUS_ENERGY"
+      ],
+      [
+        24,
+        "DOUBLE_TEAM"
+      ],
+      [
+        29,
+        "SLASH"
+      ],
+      [
+        35,
+        "SWORDS_DANCE"
+      ],
+      [
+        42,
+        "AGILITY"
+      ]
+    ]
+  },
+  "SEADRA": {
+    "evolutions": [],
+    "learnset": [
+      [
+        19,
+        "SMOKESCREEN"
+      ],
+      [
+        24,
+        "LEER"
+      ],
+      [
+        30,
+        "WATER_GUN"
+      ],
+      [
+        41,
+        "AGILITY"
+      ],
+      [
+        52,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "SEAKING": {
+    "evolutions": [],
+    "learnset": [
+      [
+        19,
+        "SUPERSONIC"
+      ],
+      [
+        24,
+        "HORN_ATTACK"
+      ],
+      [
+        30,
+        "FURY_ATTACK"
+      ],
+      [
+        39,
+        "WATERFALL"
+      ],
+      [
+        48,
+        "HORN_DRILL"
+      ],
+      [
+        54,
+        "AGILITY"
+      ]
+    ]
+  },
+  "SEEL": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "34",
+        "DEWGONG"
+      ]
+    ],
+    "learnset": [
+      [
+        30,
+        "GROWL"
+      ],
+      [
+        35,
+        "AURORA_BEAM"
+      ],
+      [
+        40,
+        "REST"
+      ],
+      [
+        45,
+        "TAKE_DOWN"
+      ],
+      [
+        50,
+        "ICE_BEAM"
+      ]
+    ]
+  },
+  "SHELLDER": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "WATER_STONE",
+        "1",
+        "CLOYSTER"
+      ]
+    ],
+    "learnset": [
+      [
+        18,
+        "SUPERSONIC"
+      ],
+      [
+        23,
+        "CLAMP"
+      ],
+      [
+        30,
+        "AURORA_BEAM"
+      ],
+      [
+        39,
+        "LEER"
+      ],
+      [
+        50,
+        "ICE_BEAM"
+      ]
+    ]
+  },
+  "SLOWBRO": {
+    "evolutions": [],
+    "learnset": [
+      [
+        18,
+        "DISABLE"
+      ],
+      [
+        22,
+        "HEADBUTT"
+      ],
+      [
+        27,
+        "GROWL"
+      ],
+      [
+        33,
+        "WATER_GUN"
+      ],
+      [
+        37,
+        "WITHDRAW"
+      ],
+      [
+        44,
+        "AMNESIA"
+      ],
+      [
+        55,
+        "PSYCHIC_M"
+      ]
+    ]
+  },
+  "SLOWPOKE": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "37",
+        "SLOWBRO"
+      ]
+    ],
+    "learnset": [
+      [
+        18,
+        "DISABLE"
+      ],
+      [
+        22,
+        "HEADBUTT"
+      ],
+      [
+        27,
+        "GROWL"
+      ],
+      [
+        33,
+        "WATER_GUN"
+      ],
+      [
+        40,
+        "AMNESIA"
+      ],
+      [
+        48,
+        "PSYCHIC_M"
+      ]
+    ]
+  },
+  "SNORLAX": {
+    "evolutions": [],
+    "learnset": [
+      [
+        35,
+        "BODY_SLAM"
+      ],
+      [
+        41,
+        "HARDEN"
+      ],
+      [
+        48,
+        "DOUBLE_EDGE"
+      ],
+      [
+        56,
+        "HYPER_BEAM"
+      ]
+    ]
+  },
+  "SPEAROW": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "20",
+        "FEAROW"
+      ]
+    ],
+    "learnset": [
+      [
+        9,
+        "LEER"
+      ],
+      [
+        15,
+        "FURY_ATTACK"
+      ],
+      [
+        22,
+        "MIRROR_MOVE"
+      ],
+      [
+        29,
+        "DRILL_PECK"
+      ],
+      [
+        36,
+        "AGILITY"
+      ]
+    ]
+  },
+  "SQUIRTLE": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "16",
+        "WARTORTLE"
+      ]
+    ],
+    "learnset": [
+      [
+        8,
+        "BUBBLE"
+      ],
+      [
+        15,
+        "WATER_GUN"
+      ],
+      [
+        22,
+        "BITE"
+      ],
+      [
+        28,
+        "WITHDRAW"
+      ],
+      [
+        35,
+        "SKULL_BASH"
+      ],
+      [
+        42,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "STARMIE": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "STARYU": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "WATER_STONE",
+        "1",
+        "STARMIE"
+      ]
+    ],
+    "learnset": [
+      [
+        17,
+        "WATER_GUN"
+      ],
+      [
+        22,
+        "HARDEN"
+      ],
+      [
+        27,
+        "RECOVER"
+      ],
+      [
+        32,
+        "SWIFT"
+      ],
+      [
+        37,
+        "MINIMIZE"
+      ],
+      [
+        42,
+        "LIGHT_SCREEN"
+      ],
+      [
+        47,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "TANGELA": {
+    "evolutions": [],
+    "learnset": [
+      [
+        29,
+        "ABSORB"
+      ],
+      [
+        32,
+        "POISONPOWDER"
+      ],
+      [
+        36,
+        "STUN_SPORE"
+      ],
+      [
+        39,
+        "SLEEP_POWDER"
+      ],
+      [
+        45,
+        "SLAM"
+      ],
+      [
+        49,
+        "GROWTH"
+      ]
+    ]
+  },
+  "TAUROS": {
+    "evolutions": [],
+    "learnset": [
+      [
+        21,
+        "STOMP"
+      ],
+      [
+        28,
+        "TAIL_WHIP"
+      ],
+      [
+        35,
+        "LEER"
+      ],
+      [
+        44,
+        "RAGE"
+      ],
+      [
+        51,
+        "TAKE_DOWN"
+      ]
+    ]
+  },
+  "TENTACOOL": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "30",
+        "TENTACRUEL"
+      ]
+    ],
+    "learnset": [
+      [
+        7,
+        "SUPERSONIC"
+      ],
+      [
+        13,
+        "WRAP"
+      ],
+      [
+        18,
+        "POISON_STING"
+      ],
+      [
+        22,
+        "WATER_GUN"
+      ],
+      [
+        27,
+        "CONSTRICT"
+      ],
+      [
+        33,
+        "BARRIER"
+      ],
+      [
+        40,
+        "SCREECH"
+      ],
+      [
+        48,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "TENTACRUEL": {
+    "evolutions": [],
+    "learnset": [
+      [
+        7,
+        "SUPERSONIC"
+      ],
+      [
+        13,
+        "WRAP"
+      ],
+      [
+        18,
+        "POISON_STING"
+      ],
+      [
+        22,
+        "WATER_GUN"
+      ],
+      [
+        27,
+        "CONSTRICT"
+      ],
+      [
+        35,
+        "BARRIER"
+      ],
+      [
+        43,
+        "SCREECH"
+      ],
+      [
+        50,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "VAPOREON": {
+    "evolutions": [],
+    "learnset": [
+      [
+        27,
+        "QUICK_ATTACK"
+      ],
+      [
+        31,
+        "WATER_GUN"
+      ],
+      [
+        37,
+        "TAIL_WHIP"
+      ],
+      [
+        40,
+        "BITE"
+      ],
+      [
+        42,
+        "ACID_ARMOR"
+      ],
+      [
+        44,
+        "HAZE"
+      ],
+      [
+        48,
+        "MIST"
+      ],
+      [
+        54,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "VENOMOTH": {
+    "evolutions": [],
+    "learnset": [
+      [
+        24,
+        "POISONPOWDER"
+      ],
+      [
+        27,
+        "LEECH_LIFE"
+      ],
+      [
+        30,
+        "STUN_SPORE"
+      ],
+      [
+        38,
+        "PSYBEAM"
+      ],
+      [
+        43,
+        "SLEEP_POWDER"
+      ],
+      [
+        50,
+        "PSYCHIC_M"
+      ]
+    ]
+  },
+  "VENONAT": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "31",
+        "VENOMOTH"
+      ]
+    ],
+    "learnset": [
+      [
+        24,
+        "POISONPOWDER"
+      ],
+      [
+        27,
+        "LEECH_LIFE"
+      ],
+      [
+        30,
+        "STUN_SPORE"
+      ],
+      [
+        35,
+        "PSYBEAM"
+      ],
+      [
+        38,
+        "SLEEP_POWDER"
+      ],
+      [
+        43,
+        "PSYCHIC_M"
+      ]
+    ]
+  },
+  "VENUSAUR": {
+    "evolutions": [],
+    "learnset": [
+      [
+        7,
+        "LEECH_SEED"
+      ],
+      [
+        13,
+        "VINE_WHIP"
+      ],
+      [
+        22,
+        "POISONPOWDER"
+      ],
+      [
+        30,
+        "RAZOR_LEAF"
+      ],
+      [
+        43,
+        "GROWTH"
+      ],
+      [
+        55,
+        "SLEEP_POWDER"
+      ],
+      [
+        65,
+        "SOLARBEAM"
+      ]
+    ]
+  },
+  "VICTREEBEL": {
+    "evolutions": [],
+    "learnset": [
+      [
+        13,
+        "WRAP"
+      ],
+      [
+        15,
+        "POISONPOWDER"
+      ],
+      [
+        18,
+        "SLEEP_POWDER"
+      ]
+    ]
+  },
+  "VILEPLUME": {
+    "evolutions": [],
+    "learnset": [
+      [
+        15,
+        "POISONPOWDER"
+      ],
+      [
+        17,
+        "STUN_SPORE"
+      ],
+      [
+        19,
+        "SLEEP_POWDER"
+      ]
+    ]
+  },
+  "VOLTORB": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "30",
+        "ELECTRODE"
+      ]
+    ],
+    "learnset": [
+      [
+        17,
+        "SONICBOOM"
+      ],
+      [
+        22,
+        "SELFDESTRUCT"
+      ],
+      [
+        29,
+        "LIGHT_SCREEN"
+      ],
+      [
+        36,
+        "SWIFT"
+      ],
+      [
+        43,
+        "EXPLOSION"
+      ]
+    ]
+  },
+  "VULPIX": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "FIRE_STONE",
+        "1",
+        "NINETALES"
+      ]
+    ],
+    "learnset": [
+      [
+        16,
+        "QUICK_ATTACK"
+      ],
+      [
+        21,
+        "ROAR"
+      ],
+      [
+        28,
+        "CONFUSE_RAY"
+      ],
+      [
+        35,
+        "FLAMETHROWER"
+      ],
+      [
+        42,
+        "FIRE_SPIN"
+      ]
+    ]
+  },
+  "WARTORTLE": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "36",
+        "BLASTOISE"
+      ]
+    ],
+    "learnset": [
+      [
+        8,
+        "BUBBLE"
+      ],
+      [
+        15,
+        "WATER_GUN"
+      ],
+      [
+        24,
+        "BITE"
+      ],
+      [
+        31,
+        "WITHDRAW"
+      ],
+      [
+        39,
+        "SKULL_BASH"
+      ],
+      [
+        47,
+        "HYDRO_PUMP"
+      ]
+    ]
+  },
+  "WEEDLE": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "7",
+        "KAKUNA"
+      ]
+    ],
+    "learnset": []
+  },
+  "WEEPINBELL": {
+    "evolutions": [
+      [
+        "EVOLVE_ITEM",
+        "LEAF_STONE",
+        "1",
+        "VICTREEBEL"
+      ]
+    ],
+    "learnset": [
+      [
+        13,
+        "WRAP"
+      ],
+      [
+        15,
+        "POISONPOWDER"
+      ],
+      [
+        18,
+        "SLEEP_POWDER"
+      ],
+      [
+        23,
+        "STUN_SPORE"
+      ],
+      [
+        29,
+        "ACID"
+      ],
+      [
+        38,
+        "RAZOR_LEAF"
+      ],
+      [
+        49,
+        "SLAM"
+      ]
+    ]
+  },
+  "WEEZING": {
+    "evolutions": [],
+    "learnset": [
+      [
+        32,
+        "SLUDGE"
+      ],
+      [
+        39,
+        "SMOKESCREEN"
+      ],
+      [
+        43,
+        "SELFDESTRUCT"
+      ],
+      [
+        49,
+        "HAZE"
+      ],
+      [
+        53,
+        "EXPLOSION"
+      ]
+    ]
+  },
+  "WIGGLYTUFF": {
+    "evolutions": [],
+    "learnset": []
+  },
+  "ZAPDOS": {
+    "evolutions": [],
+    "learnset": [
+      [
+        51,
+        "THUNDER"
+      ],
+      [
+        55,
+        "AGILITY"
+      ],
+      [
+        60,
+        "LIGHT_SCREEN"
+      ]
+    ]
+  },
+  "ZUBAT": {
+    "evolutions": [
+      [
+        "EVOLVE_LEVEL",
+        "22",
+        "GOLBAT"
+      ]
+    ],
+    "learnset": [
+      [
+        10,
+        "SUPERSONIC"
+      ],
+      [
+        15,
+        "BITE"
+      ],
+      [
+        21,
+        "CONFUSE_RAY"
+      ],
+      [
+        28,
+        "WING_ATTACK"
+      ],
+      [
+        36,
+        "HAZE"
+      ]
+    ]
+  }
+}

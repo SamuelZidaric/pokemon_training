@@ -181,9 +181,123 @@ to v0.3 — expanding tactical obs requires a lockstep update of
 shared).  v0.2 policy learns status indirectly via HP deltas and episode
 outcomes — crude signal but matches the v0.1 baseline methodology.
 
-### Training Run 2 — v0.2 — IN PROGRESS
+### Training Run 2 — v0.2 — 2026-04-15
 
-_Pending — this section is filled in after the 1M-step run completes._
+**Command:**
+```powershell
+python -m battle_sim.train_battle --num-cpu 4 --steps 1000000 --run-name battle_v0_2
+```
+
+**Duration:** 24 min (~700 fps, steady across the run).
+
+**Headline results (1000-episode deterministic evaluation):**
+
+| Metric | vs random | vs greedy | Δ vs v0.1 |
+|--------|----------:|----------:|----------:|
+| Win rate | **84.2%** | **71.2%** | −4.6pp / −9.0pp |
+| Mean reward | +1.18 | +0.74 | −0.30 / −0.44 |
+| Median battle length | 4 turns | 3 turns | +2 / +1 |
+
+The regression vs v0.1's 89% / 80% is **expected and healthy** — it comes
+from the harder opponent pool (17 species vs 7) and level variance, not
+from the status machinery being broken.  Battles are longer because status
+moves now meaningfully cost turns on both sides.
+
+**Per-opponent win rate (vs greedy, 1000 games sampled uniformly):**
+
+| Opponent | Win% | Opponent | Win% |
+|----------|-----:|----------|-----:|
+| EKANS | 98% | NIDORAN_F | 61% |
+| CATERPIE | 96% | ZUBAT | 56% |
+| SANDSHREW | 95% | PARAS | 50% |
+| WEEDLE | 95% | MANKEY | 44% |
+| ONIX | 90% | SPEAROW | 36% |
+| GEODUDE | 84% | **PIKACHU** | **29%** |
+| NIDORAN_M | 83% | | |
+| RATTATA | 71% | | |
+| BELLSPROUT | 70% | | |
+| ODDISH | 67% | | |
+| PIDGEY | 65% | | |
+
+The bottom five are all **speed+status** threats: Pikachu (Thunder Wave →
+25% skip / turn), Mankey (base 70 spd + high-crit Karate Chop), Spearow
+(base 70 spd + Peck), Paras (Stun Spore), Zubat (Supersonic confusion).
+The v0.2 obs has no status channel, so the policy can't directly observe
+"I'm paralyzed, I should pick a different slot" — this is the main thing
+v0.3's obs expansion should fix.
+
+**Per-player starter:**
+
+| Starter | Win vs greedy |
+|---------|--------------:|
+| CHARMANDER | 81% |
+| SQUIRTLE   | 69% |
+| BULBASAUR  | 64% |
+
+Charmander pulls ahead: its new 4-move set (SCRATCH / GROWL / EMBER / LEER)
+gives it a real answer (Ember STAB) to most wilds, while Bulbasaur's best
+damaging move remains Grass-typed in a pool with several Rock/Flying
+resists.
+
+**Action usage distribution (per-step, vs greedy):**
+
+| Action | Fraction |
+|--------|---------:|
+| slot 0 (SCRATCH / TACKLE)           | 37.4% |
+| slot 1 (GROWL / TAIL_WHIP)          | **0.0%** |
+| slot 2 (EMBER / LEECH_SEED / BUBBLE) | 30.9% |
+| slot 3 (LEER / VINE_WHIP / WATER_GUN)| 31.7% |
+| 4..8 (switch — no-op)               | 0.0% |
+
+**Slot 1 — the single-stat debuff move — is never selected.**  The policy
+correctly identifies that a one-turn Atk−1 / Def−1 in a 3-5-turn fight is
+strictly worse than the available damaging slot.  This is the first
+training artifact that goes beyond v0.1's "pick STAB" — the policy is now
+making a *comparative-value* choice between three damaging options rather
+than one.
+
+**TensorBoard convergence:**
+
+| Metric | Start | End | Read |
+|--------|------:|----:|------|
+| `rollout/ep_rew_mean` | ~0.1 | ~1.1 | Healthy climb; noisier than v0.1 due to status RNG |
+| `rollout/ep_len_mean` | ~8 | ~4.5 | Policy decisively ends fights |
+| `train/entropy_loss` | -2.19 | -0.28 | Near-deterministic; slightly more exploration than v0.1 (-0.23) because pool is harder |
+| `train/explained_variance` | -0.01 | **+0.55** | Value fn carries more residual variance — status RNG + level variance is ~harder to predict than v0.1's deterministic pool |
+| `train/approx_kl` | 0.017 | 0.002 | Small-but-nonzero updates still happening at 1M |
+| `train/value_loss` | 0.92 | 0.50 | Critic plateau — v0.3 obs expansion should drop this further |
+
+### What v0.2 proves
+
+- Effect dispatcher, status machinery, and stat-stage system all land
+  cleanly into the engine — engine tests + 19 new effect tests all pass.
+- Policy can learn comparative choice among damaging moves (slot 0 vs 2
+  vs 3 chosen per-species) without an explicit move-type feature.
+- Status moves in the opponent arsenal materially change matchup
+  difficulty in a way the policy can't fully answer yet — signal we're
+  now training on something harder than v0.1.
+
+### What v0.2 does not exercise
+
+- Obs-side status awareness — policy doesn't see "I'm paralyzed" directly;
+  must infer from turn-skip log.  **v0.3's primary target.**
+- Switching — still a no-op (action space dim 4..8 unused, and opponent
+  pool is still 1-mon).
+- Confusion self-damage path — present in code but gated behind a 50/50
+  skip in v0.2; full self-hit is a v0.3 cleanup.
+- Freeze thaw — no Fire-move-hits-frozen logic; freeze is permanent.
+- Multi-hit moves / fixed-damage / Substitute / Mirror Move — deferred.
+
+### Open follow-ups (shipped as v0.3)
+
+- Expand tactical obs (+6 dims: self/opp status 5-way one-hot folded into
+  a 3-float sub-vector + stat-stage summary).  **Breaks the 22-dim
+  transfer contract — requires simultaneous v2/game_state.py update on
+  `claude/quizzical-sammet`.**
+- Multi-mon opponent parties + switching logic.
+- Confusion self-hit damage path.
+- Freeze / thaw on Fire move hit.
+- Trainer-team sampler (gym leaders).
 
 ### Known divergences still present
 

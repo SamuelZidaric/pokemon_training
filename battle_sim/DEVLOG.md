@@ -434,26 +434,147 @@ DummyVecEnv (single-process, 4 vectorized envs) wins because:
 **Projected 1M-step wall: ~2 min (down from 24 min).** Headline numbers
 for the main run follow.
 
-### Training Run 3 — v0.3 — PENDING
+### Training Run 3 — v0.3 — 2026-04-15
 
-_Run the training when ready:_
-
+**Command:**
 ```bash
 python -m battle_sim.train_battle --num-cpu 4 --vec dummy --steps 1000000 --run-name battle_v0_3
 ```
 
-Fill this section in after the run completes — same format as Run 2:
-headline table with vs-random / vs-greedy / Δ vs v0.2, per-opponent
-breakdown (especially watching Pikachu/Spearow/Mankey), per-starter,
-action-slot usage, and TensorBoard convergence.
+**Duration:** ~3 min wall (vs 24 min for v0.2 — **8× speedup** held end-to-end,
+matching the 100k benchmark projection).  TB reports ~6,800-11,500 fps across
+the run.
 
-**Hypothesis:** Pikachu 29% → 55%+, Spearow 36% → 55%+, Mankey 44% → 55%+.
-Overall vs-greedy 71% → 78%+.  If these numbers don't move, the signal
-isn't the bottleneck — likely candidates are (a) 1M steps isn't enough
-for the expanded state space, (b) opponent pool structurally favors
-speed+status even with perfect observability, or (c) reward shaping
-doesn't incentivize defensive play (e.g. burn-stalling).  In that order
-of likelihood — bump to 2M steps first.
+**Headline results (1000-episode deterministic evaluation):**
+
+| Metric | vs random | vs greedy | Δ vs v0.2 |
+|--------|----------:|----------:|----------:|
+| Win rate | **85.1%** | **70.9%** | +0.9pp / −0.3pp |
+| Mean reward | +1.20 | +0.70 | +0.02 / −0.04 |
+| Median battle length | 3 turns | 3 turns | −1 / 0 |
+
+Overall numbers are essentially flat vs v0.2 — but the *distribution* moved.
+The status-threat matchups (Pikachu, Spearow) saw the predicted lift; the
+"easy" damage matchups (Pidgey, Bellsprout) regressed.  Net wash on the
+mean, real signal in the tails.
+
+**Per-opponent win rate (vs greedy, 1000 games sampled uniformly):**
+
+| Opponent | v0.3 Win% | v0.2 Win% | Δ |
+|----------|----------:|----------:|--:|
+| EKANS | 96.6% | 98% | −1.4 |
+| WEEDLE | 96.2% | 95% | +1.2 |
+| CATERPIE | 95.7% | 96% | −0.3 |
+| ONIX | 91.4% | 90% | +1.4 |
+| NIDORAN_M | 91.1% | 83% | **+8.1** |
+| SANDSHREW | 90.9% | 95% | −4.1 |
+| GEODUDE | 80.4% | 84% | −3.6 |
+| **BELLSPROUT** | **76.9%** | 70% | **+6.9** |
+| RATTATA | 72.2% | 71% | +1.2 |
+| NIDORAN_F | 65.6% | 61% | +4.6 |
+| ZUBAT | 61.4% | 56% | +5.4 |
+| PARAS | 58.9% | 50% | **+8.9** |
+| ODDISH | 57.9% | 67% | −9.1 |
+| **MANKEY** | 46.8% | 44% | +2.8 |
+| **SPEAROW** | 45.1% | 36% | **+9.1** |
+| **PIDGEY** | **43.1%** | 65% | **−21.9** |
+| **PIKACHU** | 38.7% | 29% | **+9.7** |
+
+**Hypothesis verdict — partial win:**
+- Pikachu 29% → **38.7%** (+9.7pp) — moved decisively but didn't reach 55%.
+- Spearow 36% → **45.1%** (+9.1pp) — same direction, same magnitude.
+- Mankey 44% → 46.8% (+2.8pp) — barely moved; Mankey's pressure is
+  high-crit Karate Chop, not status, so the obs expansion has nothing
+  to bite on.
+- Vs-greedy 71% → 70.9% — flat, because the gains were eaten by the
+  Pidgey collapse.
+
+**The Pidgey regression is the headline anomaly.**  Pidgey carries
+Sand-Attack (ACC_DOWN1) — same accuracy-debuff family as PARAS's Stun
+Spore, ZUBAT's Supersonic, etc.  v0.2 had no obs channel for "I'm
+debuffed", so the policy treated all Pidgeys as "uniform damaging
+opponent" and just out-traded them.  v0.3 added status one-hot dims
+22..31 — but **stat-stage dims 32..35 are *self*/opp atk and def stages,
+not accuracy stages**.  My guess: the status one-hot dims being non-zero
+for *neighboring* PARAS/ZUBAT/PIKACHU rollouts taught the policy a
+defensive (likely switch-attempt → no-op or weak-debuff slot) reaction
+that generalizes badly back onto Pidgey, where the actual debuff is
+accuracy and there is no obs feature for it.  Confirmation would need
+adding accuracy-stage dims and re-running.  Filed for v0.4.
+
+**Per-player starter:**
+
+| Starter | v0.3 vs greedy | v0.2 vs greedy | Δ |
+|---------|---------------:|---------------:|--:|
+| CHARMANDER | 78.9% | 81% | −2.1 |
+| SQUIRTLE   | 70.5% | 69% | +1.5 |
+| BULBASAUR  | 64.0% | 64% | 0.0 |
+
+Starter ordering preserved.  Gap narrowed slightly — Charmander's
+Ember-STAB advantage is less of an outlier when the policy can also
+exploit status differences against Charmander's harder matchups.
+
+**Action usage distribution (per-step, vs greedy):**
+
+| Action | v0.3 | v0.2 |
+|--------|-----:|-----:|
+| slot 0 (SCRATCH / TACKLE)            | 32.6% | 37.4% |
+| slot 1 (GROWL / TAIL_WHIP)           | **1.9%** | **0.0%** |
+| slot 2 (EMBER / LEECH_SEED / BUBBLE) | 28.1% | 30.9% |
+| slot 3 (LEER / VINE_WHIP / WATER_GUN)| 37.4% | 31.7% |
+| 4..8 (switch — no-op)                | 0.0% | 0.0% |
+
+Slot 1 is no longer strictly dead — the policy now picks the debuff move
+~2% of the time.  Inspection would tell us *when*: most plausibly when
+opp is a glass-cannon physical attacker (Mankey, Pikachu) and one Atk−1
+shifts the trade math.  vs-random the rate is higher (8.7%) which is
+consistent with "policy explores debuff against weaker opponents".
+
+**TensorBoard convergence:**
+
+| Metric | Start | End | Read |
+|--------|------:|----:|------|
+| `rollout/ep_rew_mean` | -0.67 | +1.29 | Higher peak than v0.2 (+1.1) — the obs expansion gives the value fn more to chew on |
+| `rollout/ep_len_mean` | 11.4 | 4.8 | Same end as v0.2; shorter early because thin-obs lets the policy commit faster |
+| `train/entropy_loss` | -2.19 | -0.41 | Less collapsed than v0.2 (-0.28) — policy keeps slot-1 explore alive |
+| `train/explained_variance` | -0.09 | **+0.58** | Same plateau as v0.2 — the bottleneck isn't predictability of return |
+| `train/approx_kl` | 0.015 | 0.003 | Healthy; small updates at convergence |
+| `train/value_loss` | 0.68 | 0.41 | Lower than v0.2 (0.50) — value fn does benefit from status dims |
+| `time/fps` | 11,507 | 6,837 | Started fast on cold envs, settled at ~8k — matches benchmark |
+
+### What v0.3 proves
+
+- Status one-hot lifts the worst status-matchup losses by ~9pp at
+  matched compute.  Direction-correct, magnitude smaller than hoped.
+- Thin-obs + DummyVecEnv + MlpPolicy stack delivers the projected 8×
+  speedup end-to-end.  1M steps in 3 min unblocks the v0.4 iteration loop.
+- Transfer-graft test passes on real trained weights — the layer-copy
+  contract is real, not just shape compatible.
+- One-hot beat ordinal in practice: slot-1 entropy stayed alive,
+  consistent with "orthogonal status signal rather than spurious
+  magnitude axis".
+
+### What v0.3 surfaced
+
+- **Accuracy stages are the missing obs channel.**  Pidgey
+  (Sand-Attack) regressed −22pp because the obs has status and
+  atk/def stages but not acc/eva.  v0.4 must add at minimum
+  `self.acc_stage` and `opp.eva_stage` (2 dims) — likely `self.eva_stage`
+  and `opp.acc_stage` too for symmetry (4 dims; 36 → 40).
+- 1M steps may underfit the expanded state space.  The status lift is
+  real but capped well below the hypothesis target — try a 3M-step run
+  on the same obs to see whether more compute closes the Pikachu gap
+  before adding new dims.
+- Mankey is structurally hard (high-crit physical) and won't move on
+  obs alone.  Either reward-shape against crit-RNG variance or accept
+  it as a structural floor.
+
+### Hypothesis for v0.4 (not started)
+
+Add accuracy/evasion stages (4 dims, 36→40) + train 3M steps.  Expect
+Pidgey to recover toward 65%+ and Pikachu/Spearow to push past 50%.
+If Mankey still floors at ~45-50%, that's the structural-RNG floor and
+not addressable from obs.
 
 ### Deferred to v0.4
 
@@ -465,4 +586,5 @@ of likelihood — bump to 2M steps first.
 
 ---
 
-_v0.3 code ready on `claude/jovial-carson`; awaiting Training Run 3._
+_v0.3 shipped on `claude/jovial-carson`; Training Run 3 results above.
+v0.4 candidate: accuracy/evasion stage dims + 3M steps._

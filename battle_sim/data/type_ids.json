@@ -1,0 +1,19 @@
+{
+  "BIRD": 6,
+  "BUG": 7,
+  "DRAGON": 26,
+  "ELECTRIC": 23,
+  "FIGHTING": 1,
+  "FIRE": 20,
+  "FLYING": 2,
+  "GHOST": 8,
+  "GRASS": 22,
+  "GROUND": 4,
+  "ICE": 25,
+  "NORMAL": 0,
+  "POISON": 3,
+  "PSYCHIC": 24,
+  "PSYCHIC_TYPE": 24,
+  "ROCK": 5,
+  "WATER": 21
+}

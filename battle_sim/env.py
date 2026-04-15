@@ -1,0 +1,181 @@
+"""Gymnasium-compatible battle environment for PPO training.
+
+v0.3 (thin-obs): emits a flat Box(36,) containing only the tactical vector.
+The full-game Dict obs is intentionally *not* emitted here — we train the
+policy as an MlpPolicy so the first two Linear layers of the policy's MLP
+drop 1:1 into PokemonNet's tactical branch at transfer time.
+
+A PadToFullGameDictWrapper is not needed for transfer (weight copy is direct
+from mlp_extractor.policy_net), only for running the trained policy back in
+the full-game Gym env — not a Week-4 goal.  See DEVLOG v0.3 speedup entry.
+
+Action space is Discrete(9):
+    0..3 — use move slot 0..3
+    4..8 — switch to party slot 1..5 (no-op until v0.4)
+
+Rewards are unchanged from v0.2:
+    +1.0  on win
+    -1.0  on loss
+    +Δhp  shaping per turn (opp HP lost − our HP lost, in HP fraction)
+    -0.01 step penalty (encourage decisive play)
+"""
+from __future__ import annotations
+
+import gymnasium as gym
+import numpy as np
+from gymnasium import spaces
+
+from .engine import BattleEngine, BattleResult, BattleState, random_opponent_policy
+from .entities import Pokemon
+from .obs import tactical_obs
+from .rng import BattleRNG
+from .v2_contract import TACTICAL_OBS_SIZE
+
+
+# ---------------------------------------------------------------------------
+# Battle initial-state sampling
+# ---------------------------------------------------------------------------
+
+def _default_teams(rng: np.random.Generator) -> tuple[Pokemon, Pokemon]:
+    """Sample an early/mid-game matchup with level variance and status moves.
+
+    v0.2 changes vs v0.1:
+    - Player level sampled uniformly in [8, 18] — decouples the policy from
+      a fixed L10 assumption.
+    - Opponent pool widened and uses real Gen 1 learnsets at the chosen
+      level range.  Several opponents carry status moves (SLEEP_POWDER,
+      STUN_SPORE, THUNDER_WAVE, SUPERSONIC) so the policy sees the full
+      effect dispatch in training, not just damage.
+    - Player movesets include stat-stage moves (GROWL, LEER) that v0.1's
+      engine silently ignored; engine now applies them.
+    """
+    p_level = int(rng.integers(8, 19))
+
+    starters = [
+        ("CHARMANDER", ["SCRATCH", "GROWL", "EMBER", "LEER"]),
+        ("BULBASAUR",  ["TACKLE", "GROWL", "LEECH_SEED", "VINE_WHIP"]),
+        ("SQUIRTLE",   ["TACKLE", "TAIL_WHIP", "BUBBLE", "WATER_GUN"]),
+    ]
+
+    # Opponent level sampled relative to player: roughly [p-3, p+3], clamped.
+    o_level = max(3, min(25, p_level + int(rng.integers(-3, 4))))
+
+    wild_pool = [
+        ("PIDGEY",    ["TACKLE", "SAND_ATTACK", "GUST"]),
+        ("RATTATA",   ["TACKLE", "TAIL_WHIP", "QUICK_ATTACK"]),
+        ("SPEAROW",   ["PECK", "GROWL", "LEER"]),
+        ("GEODUDE",   ["TACKLE", "DEFENSE_CURL"]),
+        ("ONIX",      ["TACKLE", "SCREECH", "BIND"]),
+        ("CATERPIE",  ["TACKLE", "STRING_SHOT"]),
+        ("WEEDLE",    ["POISON_STING", "STRING_SHOT"]),
+        ("ODDISH",    ["ABSORB", "POISONPOWDER", "SLEEP_POWDER"]),
+        ("BELLSPROUT",["VINE_WHIP", "GROWTH", "SLEEP_POWDER"]),
+        ("ZUBAT",     ["LEECH_LIFE", "SUPERSONIC"]),
+        ("EKANS",     ["WRAP", "POISON_STING", "LEER"]),
+        ("SANDSHREW", ["SCRATCH", "DEFENSE_CURL", "SAND_ATTACK"]),
+        ("MANKEY",    ["SCRATCH", "LEER", "KARATE_CHOP"]),
+        ("NIDORAN_M", ["TACKLE", "LEER", "POISON_STING"]),
+        ("NIDORAN_F", ["TACKLE", "GROWL", "SCRATCH"]),
+        ("PIKACHU",   ["THUNDERSHOCK", "GROWL", "THUNDER_WAVE"]),
+        ("PARAS",     ["SCRATCH", "STUN_SPORE"]),
+    ]
+    p = starters[rng.integers(0, len(starters))]
+    o = wild_pool[rng.integers(0, len(wild_pool))]
+    player = Pokemon.build(p[0], p_level, p[1])
+    opponent = Pokemon.build(o[0], o_level, o[1])
+    return player, opponent
+
+
+# ---------------------------------------------------------------------------
+# Env
+# ---------------------------------------------------------------------------
+
+class PokemonBattleEnv(gym.Env):
+    """Single-battle Gymnasium env.  Episode = one complete battle."""
+
+    metadata = {"render_modes": []}
+
+    def __init__(
+        self,
+        sample_teams=None,
+        opponent_policy=None,
+        max_turns: int = 100,
+        seed: int | None = None,
+    ) -> None:
+        super().__init__()
+        self._sample_teams = sample_teams or _default_teams
+        self._opponent_policy = opponent_policy or random_opponent_policy
+        self._max_turns = max_turns
+
+        self.action_space = spaces.Discrete(9)
+        # Thin-obs: just the 36-dim tactical vector.  No screens / map /
+        # events / recent_actions zero-padding — those go through IPC at
+        # ~15 KB/step and dominate the per-step cost in SubprocVecEnv.
+        self.observation_space = spaces.Box(
+            low=-1.0, high=1.0, shape=(TACTICAL_OBS_SIZE,), dtype=np.float32,
+        )
+
+        self._rng_np = np.random.default_rng(seed)
+        self._battle_rng = BattleRNG(seed or 0)
+        self.state: BattleState | None = None
+        self.engine: BattleEngine | None = None
+
+    # -- gym API -----------------------------------------------------------
+
+    def reset(
+        self, seed: int | None = None, options: dict | None = None
+    ) -> tuple[dict, dict]:
+        if seed is not None:
+            self._rng_np = np.random.default_rng(seed)
+            self._battle_rng = BattleRNG(seed)
+
+        player, opponent = self._sample_teams(self._rng_np)
+        self.state = BattleState(player=player, opponent=opponent, battle_type=1)
+        self.engine = BattleEngine(
+            self.state, self._battle_rng, opponent_policy=self._opponent_policy,
+        )
+        return self._obs(), {"turn": 0}
+
+    def step(self, action: int) -> tuple[dict, float, bool, bool, dict]:
+        assert self.engine is not None and self.state is not None
+        s = self.state
+
+        prev_opp_hp = s.opponent.hp / s.opponent.max_hp if s.opponent.max_hp else 0.0
+        prev_our_hp = s.player.hp / s.player.max_hp if s.player.max_hp else 0.0
+
+        result = self.engine.step(int(action))
+
+        new_opp_hp = s.opponent.hp / s.opponent.max_hp if s.opponent.max_hp else 0.0
+        new_our_hp = s.player.hp / s.player.max_hp if s.player.max_hp else 0.0
+
+        dealt = max(0.0, prev_opp_hp - new_opp_hp)
+        taken = max(0.0, prev_our_hp - new_our_hp)
+
+        shaping = dealt - taken
+        step_pen = -0.01
+
+        if result == BattleResult.PLAYER_WIN:
+            terminal_rew = 1.0
+            terminated = True
+        elif result == BattleResult.OPPONENT_WIN:
+            terminal_rew = -1.0
+            terminated = True
+        else:
+            terminal_rew = 0.0
+            terminated = False
+
+        truncated = (not terminated) and s.turn >= self._max_turns
+        reward = float(shaping + step_pen + terminal_rew)
+
+        info = {
+            "turn": s.turn,
+            "result": int(result),
+            "events": list(s.last_events),
+        }
+        return self._obs(), reward, terminated, truncated, info
+
+    # -- observation composition -----------------------------------------
+
+    def _obs(self) -> np.ndarray:
+        assert self.state is not None
+        return tactical_obs(self.state)

@@ -1,0 +1,1652 @@
+{
+  "ABSORB": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DRAIN_HP_EFFECT",
+    "id": 71,
+    "power": 20,
+    "pp": 20,
+    "type": "GRASS",
+    "type_id": 22
+  },
+  "ACID": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DEFENSE_DOWN_SIDE_EFFECT",
+    "id": 51,
+    "power": 40,
+    "pp": 30,
+    "type": "POISON",
+    "type_id": 3
+  },
+  "ACID_ARMOR": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DEFENSE_UP2_EFFECT",
+    "id": 151,
+    "power": 0,
+    "pp": 40,
+    "type": "POISON",
+    "type_id": 3
+  },
+  "AGILITY": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPEED_UP2_EFFECT",
+    "id": 97,
+    "power": 0,
+    "pp": 30,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "AMNESIA": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPECIAL_UP2_EFFECT",
+    "id": 133,
+    "power": 0,
+    "pp": 20,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "AURORA_BEAM": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "ATTACK_DOWN_SIDE_EFFECT",
+    "id": 62,
+    "power": 65,
+    "pp": 20,
+    "type": "ICE",
+    "type_id": 25
+  },
+  "BARRAGE": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "TWO_TO_FIVE_ATTACKS_EFFECT",
+    "id": 140,
+    "power": 15,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "BARRIER": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DEFENSE_UP2_EFFECT",
+    "id": 112,
+    "power": 0,
+    "pp": 30,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "BIDE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "BIDE_EFFECT",
+    "id": 117,
+    "power": 0,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "BIND": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "TRAPPING_EFFECT",
+    "id": 20,
+    "power": 15,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "BITE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "FLINCH_SIDE_EFFECT1",
+    "id": 44,
+    "power": 60,
+    "pp": 25,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "BLIZZARD": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "FREEZE_SIDE_EFFECT1",
+    "id": 59,
+    "power": 120,
+    "pp": 5,
+    "type": "ICE",
+    "type_id": 25
+  },
+  "BODY_SLAM": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "PARALYZE_SIDE_EFFECT2",
+    "id": 34,
+    "power": 85,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "BONEMERANG": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "ATTACK_TWICE_EFFECT",
+    "id": 155,
+    "power": 50,
+    "pp": 10,
+    "type": "GROUND",
+    "type_id": 4
+  },
+  "BONE_CLUB": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "FLINCH_SIDE_EFFECT1",
+    "id": 125,
+    "power": 65,
+    "pp": 20,
+    "type": "GROUND",
+    "type_id": 4
+  },
+  "BUBBLE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPEED_DOWN_SIDE_EFFECT",
+    "id": 145,
+    "power": 20,
+    "pp": 30,
+    "type": "WATER",
+    "type_id": 21
+  },
+  "BUBBLEBEAM": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPEED_DOWN_SIDE_EFFECT",
+    "id": 61,
+    "power": 65,
+    "pp": 20,
+    "type": "WATER",
+    "type_id": 21
+  },
+  "CLAMP": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "TRAPPING_EFFECT",
+    "id": 128,
+    "power": 35,
+    "pp": 10,
+    "type": "WATER",
+    "type_id": 21
+  },
+  "COMET_PUNCH": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "TWO_TO_FIVE_ATTACKS_EFFECT",
+    "id": 4,
+    "power": 18,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "CONFUSE_RAY": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "CONFUSION_EFFECT",
+    "id": 109,
+    "power": 0,
+    "pp": 10,
+    "type": "GHOST",
+    "type_id": 8
+  },
+  "CONFUSION": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "CONFUSION_SIDE_EFFECT",
+    "id": 93,
+    "power": 50,
+    "pp": 25,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "CONSTRICT": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPEED_DOWN_SIDE_EFFECT",
+    "id": 132,
+    "power": 10,
+    "pp": 35,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "CONVERSION": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "CONVERSION_EFFECT",
+    "id": 160,
+    "power": 0,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "COUNTER": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 68,
+    "power": 1,
+    "pp": 20,
+    "type": "FIGHTING",
+    "type_id": 1
+  },
+  "CRABHAMMER": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 152,
+    "power": 90,
+    "pp": 10,
+    "type": "WATER",
+    "type_id": 21
+  },
+  "CUT": {
+    "accuracy": 242,
+    "accuracy_pct": 95,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 15,
+    "power": 50,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "DEFENSE_CURL": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DEFENSE_UP1_EFFECT",
+    "id": 111,
+    "power": 0,
+    "pp": 40,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "DIG": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "CHARGE_EFFECT",
+    "id": 91,
+    "power": 100,
+    "pp": 10,
+    "type": "GROUND",
+    "type_id": 4
+  },
+  "DISABLE": {
+    "accuracy": 140,
+    "accuracy_pct": 55,
+    "effect": "DISABLE_EFFECT",
+    "id": 50,
+    "power": 0,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "DIZZY_PUNCH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 146,
+    "power": 70,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "DOUBLESLAP": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "TWO_TO_FIVE_ATTACKS_EFFECT",
+    "id": 3,
+    "power": 15,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "DOUBLE_EDGE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "RECOIL_EFFECT",
+    "id": 38,
+    "power": 100,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "DOUBLE_KICK": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "ATTACK_TWICE_EFFECT",
+    "id": 24,
+    "power": 30,
+    "pp": 30,
+    "type": "FIGHTING",
+    "type_id": 1
+  },
+  "DOUBLE_TEAM": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "EVASION_UP1_EFFECT",
+    "id": 104,
+    "power": 0,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "DRAGON_RAGE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPECIAL_DAMAGE_EFFECT",
+    "id": 82,
+    "power": 1,
+    "pp": 10,
+    "type": "DRAGON",
+    "type_id": 26
+  },
+  "DREAM_EATER": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DREAM_EATER_EFFECT",
+    "id": 138,
+    "power": 100,
+    "pp": 15,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "DRILL_PECK": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 65,
+    "power": 80,
+    "pp": 20,
+    "type": "FLYING",
+    "type_id": 2
+  },
+  "EARTHQUAKE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 89,
+    "power": 100,
+    "pp": 10,
+    "type": "GROUND",
+    "type_id": 4
+  },
+  "EGG_BOMB": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 121,
+    "power": 100,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "EMBER": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "BURN_SIDE_EFFECT1",
+    "id": 52,
+    "power": 40,
+    "pp": 25,
+    "type": "FIRE",
+    "type_id": 20
+  },
+  "EXPLOSION": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "EXPLODE_EFFECT",
+    "id": 153,
+    "power": 170,
+    "pp": 5,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "FIRE_BLAST": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "BURN_SIDE_EFFECT2",
+    "id": 126,
+    "power": 120,
+    "pp": 5,
+    "type": "FIRE",
+    "type_id": 20
+  },
+  "FIRE_PUNCH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "BURN_SIDE_EFFECT1",
+    "id": 7,
+    "power": 75,
+    "pp": 15,
+    "type": "FIRE",
+    "type_id": 20
+  },
+  "FIRE_SPIN": {
+    "accuracy": 178,
+    "accuracy_pct": 70,
+    "effect": "TRAPPING_EFFECT",
+    "id": 83,
+    "power": 15,
+    "pp": 15,
+    "type": "FIRE",
+    "type_id": 20
+  },
+  "FISSURE": {
+    "accuracy": 76,
+    "accuracy_pct": 30,
+    "effect": "OHKO_EFFECT",
+    "id": 90,
+    "power": 1,
+    "pp": 5,
+    "type": "GROUND",
+    "type_id": 4
+  },
+  "FLAMETHROWER": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "BURN_SIDE_EFFECT1",
+    "id": 53,
+    "power": 95,
+    "pp": 15,
+    "type": "FIRE",
+    "type_id": 20
+  },
+  "FLASH": {
+    "accuracy": 178,
+    "accuracy_pct": 70,
+    "effect": "ACCURACY_DOWN1_EFFECT",
+    "id": 148,
+    "power": 0,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "FLY": {
+    "accuracy": 242,
+    "accuracy_pct": 95,
+    "effect": "FLY_EFFECT",
+    "id": 19,
+    "power": 70,
+    "pp": 15,
+    "type": "FLYING",
+    "type_id": 2
+  },
+  "FOCUS_ENERGY": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "FOCUS_ENERGY_EFFECT",
+    "id": 116,
+    "power": 0,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "FURY_ATTACK": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "TWO_TO_FIVE_ATTACKS_EFFECT",
+    "id": 31,
+    "power": 15,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "FURY_SWIPES": {
+    "accuracy": 204,
+    "accuracy_pct": 80,
+    "effect": "TWO_TO_FIVE_ATTACKS_EFFECT",
+    "id": 154,
+    "power": 18,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "GLARE": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "PARALYZE_EFFECT",
+    "id": 137,
+    "power": 0,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "GROWL": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "ATTACK_DOWN1_EFFECT",
+    "id": 45,
+    "power": 0,
+    "pp": 40,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "GROWTH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPECIAL_UP1_EFFECT",
+    "id": 74,
+    "power": 0,
+    "pp": 40,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "GUILLOTINE": {
+    "accuracy": 76,
+    "accuracy_pct": 30,
+    "effect": "OHKO_EFFECT",
+    "id": 12,
+    "power": 1,
+    "pp": 5,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "GUST": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 16,
+    "power": 40,
+    "pp": 35,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "HARDEN": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DEFENSE_UP1_EFFECT",
+    "id": 106,
+    "power": 0,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "HAZE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "HAZE_EFFECT",
+    "id": 114,
+    "power": 0,
+    "pp": 30,
+    "type": "ICE",
+    "type_id": 25
+  },
+  "HEADBUTT": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "FLINCH_SIDE_EFFECT2",
+    "id": 29,
+    "power": 70,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "HI_JUMP_KICK": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "JUMP_KICK_EFFECT",
+    "id": 136,
+    "power": 85,
+    "pp": 20,
+    "type": "FIGHTING",
+    "type_id": 1
+  },
+  "HORN_ATTACK": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 30,
+    "power": 65,
+    "pp": 25,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "HORN_DRILL": {
+    "accuracy": 76,
+    "accuracy_pct": 30,
+    "effect": "OHKO_EFFECT",
+    "id": 32,
+    "power": 1,
+    "pp": 5,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "HYDRO_PUMP": {
+    "accuracy": 204,
+    "accuracy_pct": 80,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 56,
+    "power": 120,
+    "pp": 5,
+    "type": "WATER",
+    "type_id": 21
+  },
+  "HYPER_BEAM": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "HYPER_BEAM_EFFECT",
+    "id": 63,
+    "power": 150,
+    "pp": 5,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "HYPER_FANG": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "FLINCH_SIDE_EFFECT1",
+    "id": 158,
+    "power": 80,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "HYPNOSIS": {
+    "accuracy": 153,
+    "accuracy_pct": 60,
+    "effect": "SLEEP_EFFECT",
+    "id": 95,
+    "power": 0,
+    "pp": 20,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "ICE_BEAM": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "FREEZE_SIDE_EFFECT1",
+    "id": 58,
+    "power": 95,
+    "pp": 10,
+    "type": "ICE",
+    "type_id": 25
+  },
+  "ICE_PUNCH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "FREEZE_SIDE_EFFECT1",
+    "id": 8,
+    "power": 75,
+    "pp": 15,
+    "type": "ICE",
+    "type_id": 25
+  },
+  "JUMP_KICK": {
+    "accuracy": 242,
+    "accuracy_pct": 95,
+    "effect": "JUMP_KICK_EFFECT",
+    "id": 26,
+    "power": 70,
+    "pp": 25,
+    "type": "FIGHTING",
+    "type_id": 1
+  },
+  "KARATE_CHOP": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 2,
+    "power": 50,
+    "pp": 25,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "KINESIS": {
+    "accuracy": 204,
+    "accuracy_pct": 80,
+    "effect": "ACCURACY_DOWN1_EFFECT",
+    "id": 134,
+    "power": 0,
+    "pp": 15,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "LEECH_LIFE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DRAIN_HP_EFFECT",
+    "id": 141,
+    "power": 20,
+    "pp": 15,
+    "type": "BUG",
+    "type_id": 7
+  },
+  "LEECH_SEED": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "LEECH_SEED_EFFECT",
+    "id": 73,
+    "power": 0,
+    "pp": 10,
+    "type": "GRASS",
+    "type_id": 22
+  },
+  "LEER": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DEFENSE_DOWN1_EFFECT",
+    "id": 43,
+    "power": 0,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "LICK": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "PARALYZE_SIDE_EFFECT2",
+    "id": 122,
+    "power": 20,
+    "pp": 30,
+    "type": "GHOST",
+    "type_id": 8
+  },
+  "LIGHT_SCREEN": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "LIGHT_SCREEN_EFFECT",
+    "id": 113,
+    "power": 0,
+    "pp": 30,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "LOVELY_KISS": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "SLEEP_EFFECT",
+    "id": 142,
+    "power": 0,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "LOW_KICK": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "FLINCH_SIDE_EFFECT2",
+    "id": 67,
+    "power": 50,
+    "pp": 20,
+    "type": "FIGHTING",
+    "type_id": 1
+  },
+  "MEDITATE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "ATTACK_UP1_EFFECT",
+    "id": 96,
+    "power": 0,
+    "pp": 40,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "MEGA_DRAIN": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DRAIN_HP_EFFECT",
+    "id": 72,
+    "power": 40,
+    "pp": 10,
+    "type": "GRASS",
+    "type_id": 22
+  },
+  "MEGA_KICK": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 25,
+    "power": 120,
+    "pp": 5,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "MEGA_PUNCH": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 5,
+    "power": 80,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "METRONOME": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "METRONOME_EFFECT",
+    "id": 118,
+    "power": 0,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "MIMIC": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "MIMIC_EFFECT",
+    "id": 102,
+    "power": 0,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "MINIMIZE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "EVASION_UP1_EFFECT",
+    "id": 107,
+    "power": 0,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "MIRROR_MOVE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "MIRROR_MOVE_EFFECT",
+    "id": 119,
+    "power": 0,
+    "pp": 20,
+    "type": "FLYING",
+    "type_id": 2
+  },
+  "MIST": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "MIST_EFFECT",
+    "id": 54,
+    "power": 0,
+    "pp": 30,
+    "type": "ICE",
+    "type_id": 25
+  },
+  "NIGHT_SHADE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPECIAL_DAMAGE_EFFECT",
+    "id": 101,
+    "power": 0,
+    "pp": 15,
+    "type": "GHOST",
+    "type_id": 8
+  },
+  "PAY_DAY": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "PAY_DAY_EFFECT",
+    "id": 6,
+    "power": 40,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "PECK": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 64,
+    "power": 35,
+    "pp": 35,
+    "type": "FLYING",
+    "type_id": 2
+  },
+  "PETAL_DANCE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "THRASH_PETAL_DANCE_EFFECT",
+    "id": 80,
+    "power": 70,
+    "pp": 20,
+    "type": "GRASS",
+    "type_id": 22
+  },
+  "PIN_MISSILE": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "TWO_TO_FIVE_ATTACKS_EFFECT",
+    "id": 42,
+    "power": 14,
+    "pp": 20,
+    "type": "BUG",
+    "type_id": 7
+  },
+  "POISONPOWDER": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "POISON_EFFECT",
+    "id": 77,
+    "power": 0,
+    "pp": 35,
+    "type": "POISON",
+    "type_id": 3
+  },
+  "POISON_GAS": {
+    "accuracy": 140,
+    "accuracy_pct": 55,
+    "effect": "POISON_EFFECT",
+    "id": 139,
+    "power": 0,
+    "pp": 40,
+    "type": "POISON",
+    "type_id": 3
+  },
+  "POISON_STING": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "POISON_SIDE_EFFECT1",
+    "id": 40,
+    "power": 15,
+    "pp": 35,
+    "type": "POISON",
+    "type_id": 3
+  },
+  "POUND": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 1,
+    "power": 40,
+    "pp": 35,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "PSYBEAM": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "CONFUSION_SIDE_EFFECT",
+    "id": 60,
+    "power": 65,
+    "pp": 20,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "PSYCHIC_M": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPECIAL_DOWN_SIDE_EFFECT",
+    "id": 94,
+    "power": 90,
+    "pp": 10,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "PSYWAVE": {
+    "accuracy": 204,
+    "accuracy_pct": 80,
+    "effect": "SPECIAL_DAMAGE_EFFECT",
+    "id": 149,
+    "power": 1,
+    "pp": 15,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "QUICK_ATTACK": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 98,
+    "power": 40,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "RAGE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "RAGE_EFFECT",
+    "id": 99,
+    "power": 20,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "RAZOR_LEAF": {
+    "accuracy": 242,
+    "accuracy_pct": 95,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 75,
+    "power": 55,
+    "pp": 25,
+    "type": "GRASS",
+    "type_id": 22
+  },
+  "RAZOR_WIND": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "CHARGE_EFFECT",
+    "id": 13,
+    "power": 80,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "RECOVER": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "HEAL_EFFECT",
+    "id": 105,
+    "power": 0,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "REFLECT": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "REFLECT_EFFECT",
+    "id": 115,
+    "power": 0,
+    "pp": 20,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "REST": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "HEAL_EFFECT",
+    "id": 156,
+    "power": 0,
+    "pp": 10,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "ROAR": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SWITCH_AND_TELEPORT_EFFECT",
+    "id": 46,
+    "power": 0,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "ROCK_SLIDE": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 157,
+    "power": 75,
+    "pp": 10,
+    "type": "ROCK",
+    "type_id": 5
+  },
+  "ROCK_THROW": {
+    "accuracy": 166,
+    "accuracy_pct": 65,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 88,
+    "power": 50,
+    "pp": 15,
+    "type": "ROCK",
+    "type_id": 5
+  },
+  "ROLLING_KICK": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "FLINCH_SIDE_EFFECT2",
+    "id": 27,
+    "power": 60,
+    "pp": 15,
+    "type": "FIGHTING",
+    "type_id": 1
+  },
+  "SAND_ATTACK": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "ACCURACY_DOWN1_EFFECT",
+    "id": 28,
+    "power": 0,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SCRATCH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 10,
+    "power": 40,
+    "pp": 35,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SCREECH": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "DEFENSE_DOWN2_EFFECT",
+    "id": 103,
+    "power": 0,
+    "pp": 40,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SEISMIC_TOSS": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPECIAL_DAMAGE_EFFECT",
+    "id": 69,
+    "power": 1,
+    "pp": 20,
+    "type": "FIGHTING",
+    "type_id": 1
+  },
+  "SELFDESTRUCT": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "EXPLODE_EFFECT",
+    "id": 120,
+    "power": 130,
+    "pp": 5,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SHARPEN": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "ATTACK_UP1_EFFECT",
+    "id": 159,
+    "power": 0,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SING": {
+    "accuracy": 140,
+    "accuracy_pct": 55,
+    "effect": "SLEEP_EFFECT",
+    "id": 47,
+    "power": 0,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SKULL_BASH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "CHARGE_EFFECT",
+    "id": 130,
+    "power": 100,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SKY_ATTACK": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "CHARGE_EFFECT",
+    "id": 143,
+    "power": 140,
+    "pp": 5,
+    "type": "FLYING",
+    "type_id": 2
+  },
+  "SLAM": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 21,
+    "power": 80,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SLASH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 163,
+    "power": 70,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SLEEP_POWDER": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "SLEEP_EFFECT",
+    "id": 79,
+    "power": 0,
+    "pp": 15,
+    "type": "GRASS",
+    "type_id": 22
+  },
+  "SLUDGE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "POISON_SIDE_EFFECT2",
+    "id": 124,
+    "power": 65,
+    "pp": 20,
+    "type": "POISON",
+    "type_id": 3
+  },
+  "SMOG": {
+    "accuracy": 178,
+    "accuracy_pct": 70,
+    "effect": "POISON_SIDE_EFFECT2",
+    "id": 123,
+    "power": 20,
+    "pp": 20,
+    "type": "POISON",
+    "type_id": 3
+  },
+  "SMOKESCREEN": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "ACCURACY_DOWN1_EFFECT",
+    "id": 108,
+    "power": 0,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SOFTBOILED": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "HEAL_EFFECT",
+    "id": 135,
+    "power": 0,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SOLARBEAM": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "CHARGE_EFFECT",
+    "id": 76,
+    "power": 120,
+    "pp": 10,
+    "type": "GRASS",
+    "type_id": 22
+  },
+  "SONICBOOM": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "SPECIAL_DAMAGE_EFFECT",
+    "id": 49,
+    "power": 1,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SPIKE_CANNON": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "TWO_TO_FIVE_ATTACKS_EFFECT",
+    "id": 131,
+    "power": 20,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SPLASH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SPLASH_EFFECT",
+    "id": 150,
+    "power": 0,
+    "pp": 40,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SPORE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SLEEP_EFFECT",
+    "id": 147,
+    "power": 0,
+    "pp": 15,
+    "type": "GRASS",
+    "type_id": 22
+  },
+  "STOMP": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "FLINCH_SIDE_EFFECT2",
+    "id": 23,
+    "power": 65,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "STRENGTH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 70,
+    "power": 80,
+    "pp": 15,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "STRING_SHOT": {
+    "accuracy": 242,
+    "accuracy_pct": 95,
+    "effect": "SPEED_DOWN1_EFFECT",
+    "id": 81,
+    "power": 0,
+    "pp": 40,
+    "type": "BUG",
+    "type_id": 7
+  },
+  "STRUGGLE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "RECOIL_EFFECT",
+    "id": 165,
+    "power": 50,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "STUN_SPORE": {
+    "accuracy": 191,
+    "accuracy_pct": 75,
+    "effect": "PARALYZE_EFFECT",
+    "id": 78,
+    "power": 0,
+    "pp": 30,
+    "type": "GRASS",
+    "type_id": 22
+  },
+  "SUBMISSION": {
+    "accuracy": 204,
+    "accuracy_pct": 80,
+    "effect": "RECOIL_EFFECT",
+    "id": 66,
+    "power": 80,
+    "pp": 25,
+    "type": "FIGHTING",
+    "type_id": 1
+  },
+  "SUBSTITUTE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SUBSTITUTE_EFFECT",
+    "id": 164,
+    "power": 0,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SUPERSONIC": {
+    "accuracy": 140,
+    "accuracy_pct": 55,
+    "effect": "CONFUSION_EFFECT",
+    "id": 48,
+    "power": 0,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SUPER_FANG": {
+    "accuracy": 230,
+    "accuracy_pct": 90,
+    "effect": "SUPER_FANG_EFFECT",
+    "id": 162,
+    "power": 1,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SURF": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 57,
+    "power": 95,
+    "pp": 15,
+    "type": "WATER",
+    "type_id": 21
+  },
+  "SWIFT": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SWIFT_EFFECT",
+    "id": 129,
+    "power": 60,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "SWORDS_DANCE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "ATTACK_UP2_EFFECT",
+    "id": 14,
+    "power": 0,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "TACKLE": {
+    "accuracy": 242,
+    "accuracy_pct": 95,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 33,
+    "power": 35,
+    "pp": 35,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "TAIL_WHIP": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DEFENSE_DOWN1_EFFECT",
+    "id": 39,
+    "power": 0,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "TAKE_DOWN": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "RECOIL_EFFECT",
+    "id": 36,
+    "power": 90,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "TELEPORT": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "SWITCH_AND_TELEPORT_EFFECT",
+    "id": 100,
+    "power": 0,
+    "pp": 20,
+    "type": "PSYCHIC_TYPE",
+    "type_id": 24
+  },
+  "THRASH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "THRASH_PETAL_DANCE_EFFECT",
+    "id": 37,
+    "power": 90,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "THUNDER": {
+    "accuracy": 178,
+    "accuracy_pct": 70,
+    "effect": "PARALYZE_SIDE_EFFECT1",
+    "id": 87,
+    "power": 120,
+    "pp": 10,
+    "type": "ELECTRIC",
+    "type_id": 23
+  },
+  "THUNDERBOLT": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "PARALYZE_SIDE_EFFECT1",
+    "id": 85,
+    "power": 95,
+    "pp": 15,
+    "type": "ELECTRIC",
+    "type_id": 23
+  },
+  "THUNDERPUNCH": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "PARALYZE_SIDE_EFFECT1",
+    "id": 9,
+    "power": 75,
+    "pp": 15,
+    "type": "ELECTRIC",
+    "type_id": 23
+  },
+  "THUNDERSHOCK": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "PARALYZE_SIDE_EFFECT1",
+    "id": 84,
+    "power": 40,
+    "pp": 30,
+    "type": "ELECTRIC",
+    "type_id": 23
+  },
+  "THUNDER_WAVE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "PARALYZE_EFFECT",
+    "id": 86,
+    "power": 0,
+    "pp": 20,
+    "type": "ELECTRIC",
+    "type_id": 23
+  },
+  "TOXIC": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "POISON_EFFECT",
+    "id": 92,
+    "power": 0,
+    "pp": 10,
+    "type": "POISON",
+    "type_id": 3
+  },
+  "TRANSFORM": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "TRANSFORM_EFFECT",
+    "id": 144,
+    "power": 0,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "TRI_ATTACK": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 161,
+    "power": 80,
+    "pp": 10,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "TWINEEDLE": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "TWINEEDLE_EFFECT",
+    "id": 41,
+    "power": 25,
+    "pp": 20,
+    "type": "BUG",
+    "type_id": 7
+  },
+  "VICEGRIP": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 11,
+    "power": 55,
+    "pp": 30,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "VINE_WHIP": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 22,
+    "power": 35,
+    "pp": 10,
+    "type": "GRASS",
+    "type_id": 22
+  },
+  "WATERFALL": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 127,
+    "power": 80,
+    "pp": 15,
+    "type": "WATER",
+    "type_id": 21
+  },
+  "WATER_GUN": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 55,
+    "power": 40,
+    "pp": 25,
+    "type": "WATER",
+    "type_id": 21
+  },
+  "WHIRLWIND": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "SWITCH_AND_TELEPORT_EFFECT",
+    "id": 18,
+    "power": 0,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  },
+  "WING_ATTACK": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "NO_ADDITIONAL_EFFECT",
+    "id": 17,
+    "power": 35,
+    "pp": 35,
+    "type": "FLYING",
+    "type_id": 2
+  },
+  "WITHDRAW": {
+    "accuracy": 255,
+    "accuracy_pct": 100,
+    "effect": "DEFENSE_UP1_EFFECT",
+    "id": 110,
+    "power": 0,
+    "pp": 40,
+    "type": "WATER",
+    "type_id": 21
+  },
+  "WRAP": {
+    "accuracy": 217,
+    "accuracy_pct": 85,
+    "effect": "TRAPPING_EFFECT",
+    "id": 35,
+    "power": 15,
+    "pp": 20,
+    "type": "NORMAL",
+    "type_id": 0
+  }
+}

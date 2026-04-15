@@ -18,11 +18,20 @@ from .engine import BattleState
 from .entities import Pokemon
 from .v2_contract import (
     NUM_POKEMON_TYPES,
-    STATUS_ORDINAL,
-    STATUS_ORDINAL_MAX,
+    STATUS_ONEHOT_INDEX,
+    STATUS_ONEHOT_SIZE,
     TACTICAL_OBS_SIZE,
     TYPE_ID_TO_INDEX,
 )
+
+
+def _status_onehot(status: str) -> list[float]:
+    """5-dim one-hot for status.  OK = all zeros.  Domain matches v2."""
+    v = [0.0] * STATUS_ONEHOT_SIZE
+    idx = STATUS_ONEHOT_INDEX.get(status)
+    if idx is not None:
+        v[idx] = 1.0
+    return v
 
 
 def _type_adv_signal(eff: float) -> float:
@@ -92,11 +101,11 @@ def tactical_obs(state: BattleState) -> np.ndarray:
     box = 0.0
 
     # --- v0.3 additions ------------------------------------------------
-    # [22] self_status ordinal / 5  (OK=0..FRZ=5 → [0, 1])
-    # [23] opp_status ordinal / 5
-    p_st = STATUS_ORDINAL.get(p.status, 0) / STATUS_ORDINAL_MAX
-    o_st = STATUS_ORDINAL.get(o.status, 0) / STATUS_ORDINAL_MAX
-    # [24..27] stat stages / 6  (range -6..+6 → [-1, 1])
+    # [22..26] self status one-hot (PAR, SLP, BRN, PSN, FRZ; OK=all zero)
+    # [27..31] opp  status one-hot
+    p_st = _status_onehot(p.status)
+    o_st = _status_onehot(o.status)
+    # [32..35] stat stages / 6  (range -6..+6 → [-1, 1])
     p_atk_s = p.atk_stage / 6.0
     p_def_s = p.def_stage / 6.0
     o_atk_s = o.atk_stage / 6.0
@@ -110,8 +119,8 @@ def tactical_obs(state: BattleState) -> np.ndarray:
         lt1, lt2, ot1, ot2,
         *moves,
         box,
-        # --- v0.3 additions (indices 22..27) ---
-        p_st, o_st,
+        # --- v0.3 additions (indices 22..35) ---
+        *p_st, *o_st,
         p_atk_s, p_def_s, o_atk_s, o_def_s,
     ], dtype=np.float32)
     assert vec.shape == (TACTICAL_OBS_SIZE,), \

@@ -320,30 +320,40 @@ matchups in v0.2 losses were all speed+status threats; without `self.status`
 in tactical obs the policy could only infer paralysis from turn-skip lag
 in the log.
 
-**⚠ Transfer-contract break.**  `TACTICAL_OBS_SIZE` grows from **22 → 28**.
+**⚠ Transfer-contract break.**  `TACTICAL_OBS_SIZE` grows from **22 → 36**.
 This is incompatible with v0.1 / v0.2 saved checkpoints.  Before any weight
 transfer into the full-game agent happens, `v2/game_state.py` on
-`claude/quizzical-sammet` must append the same 6 dims in the same order.
-The `test_type_id_list_matches_v2` / `test_tactical_obs_size_matches_v2`
-drift-check tests on this branch now assert 28 — when v2 is updated they
-should pass simultaneously on both sides, at which point it's safe to
+`claude/quizzical-sammet` must append the same 14 dims in the same order.
+The drift-check test on this branch now asserts 36 — when v2 is updated,
+both sides should pass simultaneously, at which point it's safe to
 transfer.
 
 **Obs layout — appended indices:**
 
 | Idx | Meaning | Encoding | Range |
 |----:|---------|----------|------:|
-| 22  | self.status  | ordinal / 5 (OK=0, PAR=1, SLP=2, BRN=3, PSN=4, FRZ=5) | [0, 1] |
-| 23  | opp.status   | ordinal / 5 | [0, 1] |
-| 24  | self.atk_stage | stage / 6 | [-1, 1] |
-| 25  | self.def_stage | stage / 6 | [-1, 1] |
-| 26  | opp.atk_stage  | stage / 6 | [-1, 1] |
-| 27  | opp.def_stage  | stage / 6 | [-1, 1] |
+| 22..26 | self.status (PAR/SLP/BRN/PSN/FRZ) | 5-dim one-hot; OK = all zeros | {0, 1} |
+| 27..31 | opp.status  (PAR/SLP/BRN/PSN/FRZ) | 5-dim one-hot; OK = all zeros | {0, 1} |
+| 32 | self.atk_stage | stage / 6 | [-1, 1] |
+| 33 | self.def_stage | stage / 6 | [-1, 1] |
+| 34 | opp.atk_stage  | stage / 6 | [-1, 1] |
+| 35 | opp.def_stage  | stage / 6 | [-1, 1] |
 
-Ordinal (not one-hot) for status to keep the expansion small — the
-tactical branch's 64-unit hidden layer has plenty of capacity to resolve
-6 discrete values from a single ordinal float.  If this turns out to be
-a learning bottleneck, v0.4 can swap it for a 5-dim one-hot (+4 dims).
+**Status encoding — one-hot, not ordinal.**  An earlier draft used an
+ordinal-and-normalize scheme (OK=0..FRZ=5 → `/5`) to keep the addition
+small.  That was rejected pre-training: ordinal imposes a spurious
+magnitude ordering (treating PAR as "between" OK and SLP, or BRN as
+"half of FRZ") that a small MLP has to waste samples un-learning.  The
+whole point of this obs expansion is sample efficiency against
+paralysis/sleep threats — using a DL anti-pattern there would be
+self-defeating.  5-dim one-hot with all-zeros for OK gives the policy
+a sparse, orthogonal signal; "OK is the absence of signal" is cheap to
+encode and common in Pokemon obs schemes.
+
+Speed/Special stages are deliberately **not** added: none of the opponent
+pool's current moves alter them beyond STRING_SHOT (SPEED_DOWN1) on the
+lone Caterpie/Weedle matchups.  Added only if v0.4 expands the pool with
+Agility/Amnesia users.
 
 Speed/Special stages are deliberately **not** added: none of the opponent
 pool's current moves alter them beyond STRING_SHOT (SPEED_DOWN1) on the
@@ -361,9 +371,9 @@ Agility/Amnesia users.
   in v0.2.
 
 **Tests:** +5 in `test_effects.py` (confusion self-hit damage, confusion
-wear-off, Fire-thaw positive case, non-Fire-doesn't-thaw negative case) +1
-in `test_obs_contract.py` (v0.3 status/stage dims), plus the 22 → 28
-assertion update.  **51 tests total passing.**
+wear-off, Fire-thaw positive case, non-Fire-doesn't-thaw negative case) +2
+in `test_obs_contract.py` (v0.3 one-hot status+stage layout, OK-is-all-zeros),
+plus the 22 → 36 assertion update.  **52 tests total passing.**
 
 ### Training Run 3 — v0.3 — PENDING
 
@@ -378,10 +388,13 @@ headline table with vs-random / vs-greedy / Δ vs v0.2, per-opponent
 breakdown (especially watching Pikachu/Spearow/Mankey), per-starter,
 action-slot usage, and TensorBoard convergence.
 
-**Hypothesis:** Pikachu 29% → 50%+, Spearow 36% → 55%+, Mankey 44% → 55%+.
-Overall vs-greedy 71% → 75%+.  If these numbers don't move, the 6-dim
-ordinal encoding isn't carrying enough signal and v0.4 should switch to
-one-hot + raise `ent-coef` or `n-steps`.
+**Hypothesis:** Pikachu 29% → 55%+, Spearow 36% → 55%+, Mankey 44% → 55%+.
+Overall vs-greedy 71% → 78%+.  If these numbers don't move, the signal
+isn't the bottleneck — likely candidates are (a) 1M steps isn't enough
+for the expanded state space, (b) opponent pool structurally favors
+speed+status even with perfect observability, or (c) reward shaping
+doesn't incentivize defensive play (e.g. burn-stalling).  In that order
+of likelihood — bump to 2M steps first.
 
 ### Deferred to v0.4
 

@@ -26,7 +26,7 @@ V2_TYPE_ID_LIST = [
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x07, 0x08,
     0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A,
 ]
-V2_TACTICAL_OBS_SIZE = 28  # v0.3 — added 6 status/stage dims at the end
+V2_TACTICAL_OBS_SIZE = 36  # v0.3 — appended 14 dims: 5+5 status 1-hot, 4 stages
 
 
 def test_type_id_list_matches_v2():
@@ -44,7 +44,7 @@ def test_obs_shape_and_dtype():
     o = Pokemon.build("PIDGEY", 5, ["TACKLE", "SAND_ATTACK"])
     state = BattleState(player=p, opponent=o, battle_type=1)
     vec = tactical_obs(state)
-    assert vec.shape == (28,)
+    assert vec.shape == (36,)
     assert vec.dtype == np.float32
 
 
@@ -95,22 +95,46 @@ def test_battle_type_domain():
     assert vec[1] == 0.5
 
 
-def test_v03_status_stage_dims():
-    """v0.3 additions — indices 22..27 encode status + atk/def stages."""
+def test_v03_status_onehot_and_stages():
+    """v0.3 additions — indices 22..35.
+
+    Layout:
+      22..26 self status 1-hot [PAR, SLP, BRN, PSN, FRZ]
+      27..31 opp  status 1-hot [PAR, SLP, BRN, PSN, FRZ]
+      32     self.atk_stage / 6
+      33     self.def_stage / 6
+      34     opp.atk_stage / 6
+      35     opp.def_stage / 6
+    """
     p = Pokemon.build("CHARMANDER", 10, ["SCRATCH"])
     o = Pokemon.build("PIDGEY", 10, ["TACKLE"])
-    p.status = "BRN"   # ordinal 3 → 3/5 = 0.6
-    o.atk_stage = -2   # -2/6
-    o.def_stage = 3    # +3/6
-    p.def_stage = -1   # -1/6
+    p.status = "BRN"          # slot 2 of self-status block
+    o.status = "PAR"          # slot 0 of opp-status block
+    o.atk_stage = -2
+    o.def_stage = 3
+    p.def_stage = -1
     state = BattleState(player=p, opponent=o, battle_type=1)
     vec = tactical_obs(state)
-    assert vec[22] == pytest.approx(3 / 5)
-    assert vec[23] == pytest.approx(0.0)        # opp OK
-    assert vec[24] == pytest.approx(0.0)        # p atk_stage 0
-    assert vec[25] == pytest.approx(-1 / 6)
-    assert vec[26] == pytest.approx(-2 / 6)
-    assert vec[27] == pytest.approx(3 / 6)
+
+    # self one-hot: BRN at 22+2 = 24
+    assert list(vec[22:27]) == [0.0, 0.0, 1.0, 0.0, 0.0]
+    # opp one-hot: PAR at 27+0 = 27
+    assert list(vec[27:32]) == [1.0, 0.0, 0.0, 0.0, 0.0]
+    # stages
+    assert vec[32] == pytest.approx(0.0)      # p atk_stage 0
+    assert vec[33] == pytest.approx(-1 / 6)   # p def_stage
+    assert vec[34] == pytest.approx(-2 / 6)   # o atk_stage
+    assert vec[35] == pytest.approx(3 / 6)    # o def_stage
+
+
+def test_v03_status_ok_is_all_zeros():
+    """Healthy mons contribute 0 to every status slot (sparse encoding)."""
+    p = Pokemon.build("CHARMANDER", 10, ["SCRATCH"])
+    o = Pokemon.build("PIDGEY", 10, ["TACKLE"])
+    state = BattleState(player=p, opponent=o, battle_type=1)
+    vec = tactical_obs(state)
+    assert list(vec[22:27]) == [0.0] * 5
+    assert list(vec[27:32]) == [0.0] * 5
 
 
 def test_opp_idx_15_16_set():

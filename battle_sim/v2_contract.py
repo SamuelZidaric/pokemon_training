@@ -21,18 +21,23 @@ NUM_POKEMON_TYPES: int = 15  # divisor is NUM_POKEMON_TYPES - 1 = 14
 
 
 # --- Tactical observation vector ---
-# v0.3: expanded 22 → 28 to give the policy direct access to major status
+# v0.3: expanded 22 → 36 to give the policy direct access to major status
 # and attack/defense stages on both actors.  This BREAKS the v0.1/v0.2
 # transfer contract — v2/game_state.py on claude/quizzical-sammet must
-# append the same 6 dims in the same order before any weight transfer.
-TACTICAL_OBS_SIZE: int = 28
+# append the same 14 dims in the same order before any weight transfer.
+#
+# Status is one-hot (5 dims per actor: PAR/SLP/BRN/PSN/FRZ; all-zero = OK).
+# Ordinal was rejected as a DL anti-pattern — spurious magnitude ordering
+# (Paralyze > Sleep? Poison "between" Sleep and Burn?) wastes sample
+# efficiency, which is precisely what this expansion is meant to improve.
+TACTICAL_OBS_SIZE: int = 36
 
-# Status ordinal encoding (shared with v2 — must match):
-STATUS_ORDINAL: dict[str, int] = {
-    "OK": 0, "PAR": 1, "SLP": 2, "BRN": 3, "PSN": 4, "FRZ": 5,
+# Status one-hot layout — index within the 5-slot per-actor sub-vector.
+# "OK" is encoded as all-zeros, so it has no slot.
+STATUS_ONEHOT_INDEX: dict[str, int] = {
+    "PAR": 0, "SLP": 1, "BRN": 2, "PSN": 3, "FRZ": 4,
 }
-# Divisor for normalizing ordinal into [0, 1]
-STATUS_ORDINAL_MAX: int = 5
+STATUS_ONEHOT_SIZE: int = 5
 
 
 # --- Full observation Dict space shapes (for zero-pad stubs in env.py) ---

@@ -92,6 +92,16 @@ class BattleEngine:
 
         dmg, crit = compute_damage(attacker, defender, move, self.rng)
         defender.hp = max(0, defender.hp - dmg)
+
+        # v0.3: Fire-type damaging hits thaw a frozen defender before the
+        # rest of the turn resolves.  pokered: any Fire move that hits
+        # clears FRZ (even 0-damage if it still landed, but we gate on
+        # power > 0 since status Fire moves don't exist in Gen 1).
+        FIRE_TYPE_ID = 0x14
+        if (defender.status == "FRZ"
+                and move.type_id == FIRE_TYPE_ID and move.power > 0):
+            defender.status = "OK"
+            log.append(f"{defender.species} thawed out")
         tag = " (crit)" if crit else ""
         if dmg > 0:
             log.append(f"{attacker.species} used {move.name}: {dmg} dmg{tag} → "

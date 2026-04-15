@@ -265,18 +265,25 @@ def check_action_allowed(
             log.append(f"{actor.species} is fully paralyzed")
             return False, log
 
-    # Confusion — 50% chance to hurt self, 50% to act normally.  In v0.2 we
-    # simplify: with confusion, 50% skip (not self-hit).  Full self-hit in v0.3.
+    # Confusion — 50% chance each turn to hurt self instead of acting.
+    # Gen 1 confusion self-hit: a typeless 40-power physical attack, crit
+    # and STAB disabled, using the attacker's own Atk vs own Def, no stages.
     if actor.confusion_turns > 0:
         actor.confusion_turns -= 1
         if actor.confusion_turns == 0:
             log.append(f"{actor.species} snapped out of confusion")
         elif rng.next_byte() < 128:
             log.append(f"{actor.species} is confused and hurt itself")
-            # Self-hit: typeless 40-power physical on self
-            self_dmg = max(1, actor.atk // 4)
-            actor.hp = max(0, actor.hp - self_dmg)
-            log.append(f"{actor.species} took {self_dmg} confusion damage")
+            # Pokered formula: base = ((2*L/5 + 2) * 40 * Atk / Def) / 50 + 2
+            L = actor.level
+            A = actor.atk
+            D = max(1, actor.df)
+            dmg = ((2 * L) // 5 + 2) * 40 * A // D // 50 + 2
+            # No type / STAB / crit / roll — confusion damage is fixed.
+            dmg = max(1, dmg)
+            actor.hp = max(0, actor.hp - dmg)
+            log.append(f"{actor.species} took {dmg} confusion damage → "
+                       f"{actor.hp}/{actor.max_hp}")
             return False, log
 
     return True, log

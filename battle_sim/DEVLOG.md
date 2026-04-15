@@ -307,5 +307,90 @@ than one.
 
 ---
 
-_v0.2 committed on `claude/jovial-carson`; update the training-run table
-above once the 1M-step run finishes._
+_v0.2 committed on `claude/jovial-carson`; training-run 2 table filled
+in above._
+
+---
+
+## v0.3 — obs expansion + confusion self-hit + freeze thaw — 2026-04-15
+
+**Goal:** address the v0.2 weakness analysis by giving the policy direct
+access to status and stat-stage state.  The Pikachu/Spearow/Mankey 29-44%
+matchups in v0.2 losses were all speed+status threats; without `self.status`
+in tactical obs the policy could only infer paralysis from turn-skip lag
+in the log.
+
+**⚠ Transfer-contract break.**  `TACTICAL_OBS_SIZE` grows from **22 → 28**.
+This is incompatible with v0.1 / v0.2 saved checkpoints.  Before any weight
+transfer into the full-game agent happens, `v2/game_state.py` on
+`claude/quizzical-sammet` must append the same 6 dims in the same order.
+The `test_type_id_list_matches_v2` / `test_tactical_obs_size_matches_v2`
+drift-check tests on this branch now assert 28 — when v2 is updated they
+should pass simultaneously on both sides, at which point it's safe to
+transfer.
+
+**Obs layout — appended indices:**
+
+| Idx | Meaning | Encoding | Range |
+|----:|---------|----------|------:|
+| 22  | self.status  | ordinal / 5 (OK=0, PAR=1, SLP=2, BRN=3, PSN=4, FRZ=5) | [0, 1] |
+| 23  | opp.status   | ordinal / 5 | [0, 1] |
+| 24  | self.atk_stage | stage / 6 | [-1, 1] |
+| 25  | self.def_stage | stage / 6 | [-1, 1] |
+| 26  | opp.atk_stage  | stage / 6 | [-1, 1] |
+| 27  | opp.def_stage  | stage / 6 | [-1, 1] |
+
+Ordinal (not one-hot) for status to keep the expansion small — the
+tactical branch's 64-unit hidden layer has plenty of capacity to resolve
+6 discrete values from a single ordinal float.  If this turns out to be
+a learning bottleneck, v0.4 can swap it for a 5-dim one-hot (+4 dims).
+
+Speed/Special stages are deliberately **not** added: none of the opponent
+pool's current moves alter them beyond STRING_SHOT (SPEED_DOWN1) on the
+lone Caterpie/Weedle matchups.  Added only if v0.4 expands the pool with
+Agility/Amnesia users.
+
+**Engine / mechanics added:**
+
+- Confusion self-hit upgraded from v0.2's 50/50 skip to the proper Gen 1
+  fixed-formula typeless 40-power physical calc:
+  `((2*L/5 + 2) * 40 * Atk / Def) / 50 + 2`.  No crit, no STAB, no roll —
+  matches pokered's confusion branch.
+- Fire-type damaging hits (`move.type_id == 0x14 && move.power > 0`) thaw
+  a frozen defender as part of the hit.  Previously freeze was permanent
+  in v0.2.
+
+**Tests:** +5 in `test_effects.py` (confusion self-hit damage, confusion
+wear-off, Fire-thaw positive case, non-Fire-doesn't-thaw negative case) +1
+in `test_obs_contract.py` (v0.3 status/stage dims), plus the 22 → 28
+assertion update.  **51 tests total passing.**
+
+### Training Run 3 — v0.3 — PENDING
+
+_Run the training when ready:_
+
+```bash
+python -m battle_sim.train_battle --num-cpu 4 --steps 1000000 --run-name battle_v0_3
+```
+
+Fill this section in after the run completes — same format as Run 2:
+headline table with vs-random / vs-greedy / Δ vs v0.2, per-opponent
+breakdown (especially watching Pikachu/Spearow/Mankey), per-starter,
+action-slot usage, and TensorBoard convergence.
+
+**Hypothesis:** Pikachu 29% → 50%+, Spearow 36% → 55%+, Mankey 44% → 55%+.
+Overall vs-greedy 71% → 75%+.  If these numbers don't move, the 6-dim
+ordinal encoding isn't carrying enough signal and v0.4 should switch to
+one-hot + raise `ent-coef` or `n-steps`.
+
+### Deferred to v0.4
+
+- Multi-mon opponent parties + switching (actions 4..8 finally meaningful).
+- Trainer AI (Brock / Misty scripted teams).
+- Speed / Special stage dims if the pool adds Agility/Amnesia users.
+- Contract reconciliation PR on `claude/quizzical-sammet` to unlock
+  weight transfer.
+
+---
+
+_v0.3 code ready on `claude/jovial-carson`; awaiting Training Run 3._

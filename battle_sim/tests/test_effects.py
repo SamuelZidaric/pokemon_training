@@ -245,6 +245,56 @@ def test_poisoned_mon_takes_residual_in_engine():
     assert opp.hp < before - 1  # residual on top of Tackle
 
 
+def test_confusion_self_hit_damage():
+    """Confused mon that rolls self-hit takes a fixed-formula hit."""
+    mon = _squirtle()
+    mon.confusion_turns = 3
+    # Force the self-hit path: rng seed that produces a byte < 128 first.
+    class DoomRNG:
+        def __init__(self): self.i = 0
+        def next_byte(self):
+            self.i += 1
+            # Always return 0 — guarantees self-hit branch.
+            return 0
+    rng = DoomRNG()
+    hp_before = mon.hp
+    can_act, log = check_action_allowed(mon, rng)
+    assert not can_act
+    assert mon.hp < hp_before
+    # Fixed-formula damage must be > 1 for a L10 squirtle hitting itself.
+    assert hp_before - mon.hp >= 2
+    assert mon.confusion_turns == 2
+
+
+def test_confusion_wears_off():
+    mon = _squirtle()
+    mon.confusion_turns = 1
+    rng = BattleRNG(0)
+    can_act, log = check_action_allowed(mon, rng)
+    assert mon.confusion_turns == 0
+    assert any("snapped out" in s for s in log)
+
+
+def test_fire_move_thaws_frozen_defender():
+    player = Pokemon.build("CHARMANDER", 20, ["EMBER"])
+    opp = Pokemon.build("SQUIRTLE", 10, ["TACKLE"])
+    opp.status = "FRZ"
+    s = BattleState(player=player, opponent=opp)
+    eng = BattleEngine(s, BattleRNG(0))
+    eng.step(0)  # Ember lands → thaw
+    assert opp.status == "OK"
+
+
+def test_non_fire_move_does_not_thaw():
+    player = Pokemon.build("CHARMANDER", 20, ["SCRATCH"])
+    opp = Pokemon.build("SQUIRTLE", 10, ["TACKLE"])
+    opp.status = "FRZ"
+    s = BattleState(player=player, opponent=opp)
+    eng = BattleEngine(s, BattleRNG(0))
+    eng.step(0)
+    assert opp.status == "FRZ"
+
+
 def test_stat_drop_move_via_engine():
     """GROWL lowers opponent's Attack stage."""
     player = Pokemon.build("CHARMANDER", 10, ["GROWL"])

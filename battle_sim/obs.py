@@ -16,7 +16,13 @@ import numpy as np
 from .data_loader import type_effectiveness
 from .engine import BattleState
 from .entities import Pokemon
-from .v2_contract import NUM_POKEMON_TYPES, TACTICAL_OBS_SIZE, TYPE_ID_TO_INDEX
+from .v2_contract import (
+    NUM_POKEMON_TYPES,
+    STATUS_ORDINAL,
+    STATUS_ORDINAL_MAX,
+    TACTICAL_OBS_SIZE,
+    TYPE_ID_TO_INDEX,
+)
 
 
 def _type_adv_signal(eff: float) -> float:
@@ -85,6 +91,17 @@ def tactical_obs(state: BattleState) -> np.ndarray:
     # [21] box count / 20 — zero in the battle sim (no PC)
     box = 0.0
 
+    # --- v0.3 additions ------------------------------------------------
+    # [22] self_status ordinal / 5  (OK=0..FRZ=5 → [0, 1])
+    # [23] opp_status ordinal / 5
+    p_st = STATUS_ORDINAL.get(p.status, 0) / STATUS_ORDINAL_MAX
+    o_st = STATUS_ORDINAL.get(o.status, 0) / STATUS_ORDINAL_MAX
+    # [24..27] stat stages / 6  (range -6..+6 → [-1, 1])
+    p_atk_s = p.atk_stage / 6.0
+    p_def_s = p.def_stage / 6.0
+    o_atk_s = o.atk_stage / 6.0
+    o_def_s = o.def_stage / 6.0
+
     vec = np.array([
         in_b, b_type, our_hp, opp_hp, opp_lvl,
         ta, bme_n,
@@ -93,6 +110,9 @@ def tactical_obs(state: BattleState) -> np.ndarray:
         lt1, lt2, ot1, ot2,
         *moves,
         box,
+        # --- v0.3 additions (indices 22..27) ---
+        p_st, o_st,
+        p_atk_s, p_def_s, o_atk_s, o_def_s,
     ], dtype=np.float32)
     assert vec.shape == (TACTICAL_OBS_SIZE,), \
         f"tactical obs shape {vec.shape} != {TACTICAL_OBS_SIZE}"
